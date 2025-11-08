@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Maps from "./pages/Maps";
+import MapDetail from "./pages/MapDetail";
 import ProjectCycle from "./pages/ProjectCycle";
 import Terminology from "./pages/Terminology";
 import NotFound from "./pages/NotFound";
@@ -26,6 +27,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/maps" element={<Maps />} />
+        <Route path="/maps/:id" element={<MapDetail />} />
         <Route path="/project-cycle" element={<ProjectCycle />} />
 
         {/* Terminology hub */}

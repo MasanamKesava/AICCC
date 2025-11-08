@@ -1,126 +1,203 @@
 import { motion } from "framer-motion";
-import { MapPin, Layers, Navigation } from "lucide-react";
+import { Link } from "react-router-dom";
+import {
+  Building2,
+  Network,
+  Car,
+  Droplets,
+  Trash2,
+  CloudRain,
+  Zap,
+  Recycle,
+  Flame,
+  Cpu,
+  Snowflake,
+  Shield,
+  AlertTriangle,
+  Map,
+  ArrowRight,
+} from "lucide-react";
 import GlassCard from "@/components/GlassCard";
 import Layout from "@/components/Layout";
 
 const Maps = () => {
-  const zones = [
-    { name: "Northern Zone", regions: ["Punjab", "Haryana", "Himachal Pradesh", "Jammu & Kashmir"], color: "from-blue-500 to-cyan-500" },
-    { name: "Southern Zone", regions: ["Tamil Nadu", "Karnataka", "Kerala", "Andhra Pradesh"], color: "from-green-500 to-emerald-500" },
-    { name: "Eastern Zone", regions: ["West Bengal", "Odisha", "Bihar", "Jharkhand"], color: "from-yellow-500 to-orange-500" },
-    { name: "Western Zone", regions: ["Maharashtra", "Gujarat", "Rajasthan", "Goa"], color: "from-purple-500 to-pink-500" },
-    { name: "Central Zone", regions: ["Madhya Pradesh", "Chhattisgarh", "Uttarakhand"], color: "from-red-500 to-rose-500" },
+  const infrastructureCategories = [
+    {
+      id: "amaravati-master-plan",
+      icon: Map,
+      title: "Amaravati Master Plan",
+      description: "Comprehensive master plan layout for the capital city development with zoning and land use patterns.",
+      color: "from-blue-500 to-cyan-500",
+    },
+    {
+      id: "connectivity",
+      icon: Network,
+      title: "Connectivity",
+      description: "Road networks, highways, and transportation corridors connecting different zones of the city.",
+      color: "from-green-500 to-emerald-500",
+    },
+    {
+      id: "traffic-transportation",
+      icon: Car,
+      title: "Traffic & Transportation",
+      description: "Traffic management systems, public transit routes, and transportation infrastructure.",
+      color: "from-yellow-500 to-orange-500",
+    },
+    {
+      id: "water-supply",
+      icon: Droplets,
+      title: "Water Supply & Fire Fighting System",
+      description: "Integrated water distribution network and fire hydrant systems for emergency response.",
+      color: "from-cyan-500 to-blue-600",
+    },
+    {
+      id: "water-waste",
+      icon: Droplets,
+      title: "Water Waste Management",
+      description: "Sewerage systems, wastewater treatment plants, and drainage infrastructure.",
+      color: "from-teal-500 to-green-600",
+    },
+    {
+      id: "storm-water",
+      icon: CloudRain,
+      title: "Storm Water Management",
+      description: "Storm drain networks, retention basins, and flood control systems.",
+      color: "from-slate-500 to-blue-700",
+    },
+    {
+      id: "power",
+      icon: Zap,
+      title: "Power",
+      description: "Electrical grid, substations, transmission lines, and distribution networks.",
+      color: "from-amber-500 to-yellow-600",
+    },
+    {
+      id: "solid-waste",
+      icon: Trash2,
+      title: "Solid Waste Management",
+      description: "Waste collection routes, transfer stations, and disposal facilities.",
+      color: "from-lime-500 to-green-600",
+    },
+    {
+      id: "gas-distribution",
+      icon: Flame,
+      title: "Gas Distribution",
+      description: "Natural gas pipeline network and distribution infrastructure.",
+      color: "from-orange-500 to-red-600",
+    },
+    {
+      id: "ict",
+      icon: Cpu,
+      title: "ICT (Information & Communication Technology)",
+      description: "Fiber optic networks, data centers, and smart city infrastructure.",
+      color: "from-violet-500 to-purple-600",
+    },
+    {
+      id: "district-cooling",
+      icon: Snowflake,
+      title: "District Cooling",
+      description: "Centralized cooling system for efficient energy distribution.",
+      color: "from-sky-500 to-cyan-600",
+    },
+    {
+      id: "safety-security",
+      icon: Shield,
+      title: "Safety & Security",
+      description: "Surveillance systems, emergency services, and public safety infrastructure.",
+      color: "from-red-500 to-rose-600",
+    },
+    {
+      id: "disaster-management",
+      icon: AlertTriangle,
+      title: "Disaster Management",
+      description: "Emergency response systems, evacuation routes, and disaster preparedness infrastructure.",
+      color: "from-orange-600 to-red-700",
+    },
+    {
+      id: "green-spaces",
+      icon: Building2,
+      title: "Green Spaces & Parks",
+      description: "Public parks, recreational areas, and urban green belt planning.",
+      color: "from-green-600 to-emerald-700",
+    },
+    {
+      id: "social-infrastructure",
+      icon: Building2,
+      title: "Social Infrastructure",
+      description: "Schools, hospitals, community centers, and public facilities distribution.",
+      color: "from-blue-600 to-indigo-700",
+    },
   ];
 
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Regional Mapping
+            Infrastructure Maps
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Explore construction zones and regional classifications across India
+            Explore comprehensive infrastructure planning maps for Amaravati Capital City
           </p>
         </motion.div>
 
-        {/* Zone Flowchart */}
-        <div className="mb-16">
-          <GlassCard className="text-center mb-8">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <Layers className="w-8 h-8 text-primary" />
-              <h2 className="text-3xl font-bold">Construction Zone Hierarchy</h2>
-            </div>
-            <p className="text-muted-foreground">
-              Zones → Regions → Villages - Hierarchical classification system
-            </p>
-          </GlassCard>
-
-          {/* Flowchart Visualization */}
-          <div className="relative max-w-4xl mx-auto">
-            <div className="grid gap-6">
-              {zones.map((zone, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <GlassCard>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {infrastructureCategories.map((category, index) => {
+            const Icon = category.icon;
+            return (
+              <motion.div
+                key={category.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <Link to={`/maps/${category.id}`}>
+                  <GlassCard className="h-full group hover:scale-105 transition-transform duration-300">
                     <div className="flex items-start gap-4">
-                      <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${zone.color} flex items-center justify-center text-white font-bold flex-shrink-0`}>
-                        {index + 1}
+                      <div
+                        className={`w-14 h-14 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center text-white flex-shrink-0 shadow-lg`}
+                      >
+                        <Icon className="w-7 h-7" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-2xl font-bold mb-3">{zone.name}</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {zone.regions.map((region, rIndex) => (
-                            <span
-                              key={rIndex}
-                              className="px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium"
-                            >
-                              {region}
-                            </span>
-                          ))}
-                        </div>
+                        <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                          {category.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          {category.description}
+                        </p>
+                        <span className="inline-flex items-center text-primary text-sm font-medium">
+                          View Map
+                          <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
+                        </span>
                       </div>
-                      <MapPin className="w-6 h-6 text-primary flex-shrink-0" />
                     </div>
                   </GlassCard>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
 
-        {/* Village Level Classification */}
-        <GlassCard className="mb-8">
-          <div className="flex items-start gap-4">
-            <Navigation className="w-12 h-12 text-primary flex-shrink-0" />
-            <div>
-              <h3 className="text-2xl font-bold mb-3">Village Level Classification</h3>
-              <p className="text-muted-foreground mb-4">
-                Each region is further subdivided into districts and villages. Construction projects are classified and tracked at the village level for precise monitoring and resource allocation.
-              </p>
-              <div className="grid md:grid-cols-3 gap-4 mt-6">
-                <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-                  <div className="text-2xl font-bold text-primary mb-1">500+</div>
-                  <div className="text-sm text-muted-foreground">Districts Covered</div>
-                </div>
-                <div className="p-4 rounded-lg bg-secondary/5 border border-secondary/20">
-                  <div className="text-2xl font-bold text-secondary mb-1">6000+</div>
-                  <div className="text-sm text-muted-foreground">Villages Mapped</div>
-                </div>
-                <div className="p-4 rounded-lg bg-accent/5 border border-accent/20">
-                  <div className="text-2xl font-bold text-accent mb-1">12000+</div>
-                  <div className="text-sm text-muted-foreground">Active Projects</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </GlassCard>
-
-        {/* Interactive Map Placeholder */}
-        <GlassCard>
-          <h3 className="text-2xl font-bold mb-4 text-center">Interactive Map</h3>
-          <div className="aspect-video bg-muted/30 rounded-lg flex items-center justify-center border-2 border-dashed border-border">
-            <div className="text-center">
-              <MapPin className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">
-                Interactive map integration - Mapbox or Google Maps can be integrated here
-              </p>
-              <p className="text-sm text-muted-foreground mt-2">
-                Contact admin to configure API keys for map services
-              </p>
-            </div>
-          </div>
-        </GlassCard>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-16"
+        >
+          <GlassCard className="text-center">
+            <h3 className="text-2xl font-bold mb-3">Interactive Infrastructure Planning</h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Each infrastructure system is carefully planned to support sustainable urban development
+              and ensure efficient service delivery to all residents of Amaravati.
+            </p>
+          </GlassCard>
+        </motion.div>
       </div>
     </Layout>
   );
