@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Light Mode - Blue Theme with Glassmorphism */
+    --background: 210 40% 98%;
+    --foreground: 215 25% 15%;
+
+    --card: 210 40% 98%;
+    --card-foreground: 215 25% 15%;
+
+    --popover: 210 40% 98%;
+    --popover-foreground: 215 25% 15%;
+
+    --primary: 210 100% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 195 100% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 30% 92%;
+    --muted-foreground: 215 15% 40%;
+
+    --accent: 185 85% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 40% 85%;
+    --input: 210 40% 85%;
+    --ring: 210 100% 45%;
+
+    --radius: 0.75rem;
+
+    /* Glassmorphic Colors */
+    --glass-bg: 210 40% 98% / 0.7;
+    --glass-border: 210 40% 90% / 0.3;
+    --glass-shadow: 210 50% 50% / 0.1;
+    
+    /* Button Glow Colors */
+    --glow-primary: 210 100% 45% / 0.5;
+    --glow-accent: 185 85% 55% / 0.5;
+
+    --sidebar-background: 210 40% 97%;
+    --sidebar-foreground: 215 25% 15%;
+    --sidebar-primary: 210 100% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 30% 92%;
+    --sidebar-accent-foreground: 215 25% 15%;
+    --sidebar-border: 210 40% 85%;
+    --sidebar-ring: 210 100% 45%;
+  }
+
+  .dark {
+    /* Dark Mode - Black/White with Blue Accents */
+    --background: 220 20% 8%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 20% 10%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 20% 10%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 210 100% 55%;
+    --primary-foreground: 220 20% 8%;
+
+    --secondary: 195 100% 60%;
+    --secondary-foreground: 220 20% 8%;
+
+    --muted: 220 15% 15%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 185 85% 60%;
+    --accent-foreground: 220 20% 8%;
+
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 210 100% 55%;
+
+    /* Glassmorphic Colors */
+    --glass-bg: 220 20% 10% / 0.7;
+    --glass-border: 220 20% 25% / 0.3;
+    --glass-shadow: 210 100% 55% / 0.15;
+    
+    /* Button Glow Colors */
+    --glow-primary: 210 100% 55% / 0.5;
+    --glow-accent: 185 85% 60% / 0.5;
+
+    --sidebar-background: 220 20% 10%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 210 100% 55%;
+    --sidebar-primary-foreground: 220 20% 8%;
+    --sidebar-accent: 220 15% 15%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 220 15% 20%;
+    --sidebar-ring: 210 100% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  /* Glassmorphism utility classes */
+  .glass {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: 0 8px 32px 0 hsl(var(--glass-shadow));
+  }
+
+  .glass-card {
+    @apply glass rounded-xl transition-all duration-300;
+  }
+
+  .glass-card:hover {
+    box-shadow: 0 12px 48px 0 hsl(var(--glass-shadow));
+    transform: translateY(-2px);
+  }
+
+  /* Navigation underline animation */
+  .nav-link {
+    @apply relative inline-block transition-colors duration-300;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-0.5 bg-primary origin-bottom-right;
+    transform: scaleX(0);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    transform: scaleX(1);
+    transform-origin: bottom-left;
+  }
+
+  /* Button glow effect */
+  .btn-glow {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-glow::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, hsl(var(--glow-primary)), hsl(var(--glow-accent)));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+    filter: blur(20px);
+  }
+
+  .btn-glow:hover::before {
+    opacity: 1;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+}
