@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import {
   AlertTriangle,
@@ -5,11 +7,16 @@ import {
   CalendarCheck,
   CheckCircle2,
   ClipboardList,
+  ClipboardCheck,
   Coins,
   Construction,
   FileCheck2,
   FileText,
   Hammer,
+  Landmark,
+  LayoutGrid,
+  Map,
+  MessageSquare,
   Package,
   Search,
   ShieldCheck,
@@ -17,29 +24,58 @@ import {
   Truck,
   Users,
   Users2,
-  Wrench,
   Workflow,
   Building2,
+  Building,
   GitBranch,
-  Link as LinkIcon,
+  Wrench,
+  History,
 } from "lucide-react";
 import Layout from "@/components/Layout";
 import GlassCard from "@/components/GlassCard";
 import { useMemo, useState, useRef, useEffect } from "react";
 
-// ────────────────────────────────────────────────────────────────────────────────
-// Government Project Construction Cycle — LEARNING PATH EDITION
-// Card-based sections with step numbers, mini progress, and Next/Prev nav.
-// Keeps your existing data but presents it as an easy-to-follow path.
-// ────────────────────────────────────────────────────────────────────────────────
+/**
+ * AICCC — Training Library (VIEW-ONLY)
+ * Sections rendered as flash-card grids with scrollable bodies.
+ * No export / download features included.
+ *
+ * Sections (original + integrated):
+ * 1) Minutes of Meeting (MOMs)
+ * 2) Communication Etiquettes
+ * 3) Construction Project Lifecycle — Overview ✅ (NEW)
+ * 4) Key Roles & Responsibilities ✅ (NEW)
+ * 5) 4Ms of Construction Resources ✅ (NEW)
+ * 6) Stages & Phases of Construction ✅ (NEW)
+ * 7) Life Cycle of a Typical Government Project
+ * 8) Construction Sequence of Roads
+ * 9) Construction Sequence of High-Rise Buildings
+ * 10) Overview of Construction Project Management
+ * 11) Project Scheduling (includes PERT/CPM relationships)
+ * 12) Hindrances in Construction Projects ✅ (NEW)
+ * 13) PMC & Contractor — Work Stages ✅ (NEW)
+ * 14) Construction Management Tools & Documents ✅ (NEW)
+ * 15) Practical Example — Water Supply Project ✅ (NEW)
+ */
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.6, delay } },
 });
 
-// Reusable: Section header
-function SectionHeader({ k, title, subtitle }: { k: number; title: string; subtitle?: string }) {
+// ────────────────────────────────────────────────────────────────────────────────
+// Reusable bits
+// ────────────────────────────────────────────────────────────────────────────────
+
+function SectionHeader({
+  k,
+  title,
+  subtitle,
+}: {
+  k: number;
+  title: string;
+  subtitle?: string;
+}) {
   return (
     <div className="flex items-start gap-4 mb-6">
       <div className="shrink-0 w-10 h-10 rounded-full bg-primary/10 text-primary grid place-items-center font-bold">
@@ -47,28 +83,33 @@ function SectionHeader({ k, title, subtitle }: { k: number; title: string; subti
       </div>
       <div>
         <h2 className="text-2xl md:text-3xl font-bold leading-tight">{title}</h2>
-        {subtitle ? (
-          <p className="text-muted-foreground mt-1">{subtitle}</p>
-        ) : null}
+        {subtitle ? <p className="text-muted-foreground mt-1">{subtitle}</p> : null}
       </div>
     </div>
   );
 }
 
-// Reusable: Learn step card
-function LearnCard({ Icon, title, desc, list }: any) {
+function LearnCard({
+  Icon,
+  title,
+  desc,
+  list,
+}: {
+  Icon?: any;
+  title: string;
+  desc?: string;
+  list?: string[];
+}) {
   return (
     <GlassCard className="h-full">
       <div className="flex items-start gap-4 mb-2">
-        <div className="p-3 rounded-xl bg-primary/10 text-primary">
-          {Icon ? <Icon className="w-6 h-6" /> : null}
-        </div>
-        <h3 className="text-lg md:text-xl font-semibold">{title}</h3>
+        <div className="p-3 rounded-xl bg-primary/10 text-primary">{Icon ? <Icon className="w-6 h-6" /> : null}</div>
+        <h3 className="text-lg md:text-xl font-semibold leading-snug">{title}</h3>
       </div>
-      {desc ? <p className="text-muted-foreground mb-2">{desc}</p> : null}
-      {Array.isArray(list) ? (
+      {desc ? <p className="text-muted-foreground mb-2 whitespace-pre-line">{desc}</p> : null}
+      {Array.isArray(list) && list.length > 0 ? (
         <ul className="list-disc list-inside text-muted-foreground space-y-1">
-          {list.map((x: string, i: number) => (
+          {list.map((x, i) => (
             <li key={i}>{x}</li>
           ))}
         </ul>
@@ -77,328 +118,503 @@ function LearnCard({ Icon, title, desc, list }: any) {
   );
 }
 
-// Tiny progress widget (based on which anchor is active)
+// ────────────────────────────────────────────────────────────────────────────────
+// Main
+// ────────────────────────────────────────────────────────────────────────────────
 
-const ProjectCycle = () => {
-  // 1) Overview phases
-  const phases = [
+export default function AICCCTrainingLibrary() {
+  // ========================= 1) Minutes of Meeting (MOMs) =========================
+  const momCards = [
     {
-      icon: Search,
-      title: "Planning & Feasibility",
-      description:
-        "Needs definition, reconnaissance surveys, feasibility/viability, preliminary cost, environmental & social screening, stakeholder consultations, and in‑principle approvals.",
+      Icon: FileText,
+      title: "What are MOMs?",
+      desc:
+        "Minutes of Meeting (MOMs) are official written records summarizing discussions, decisions, and agreed action points. They capture what was discussed, who attended, and what needs to be done, by whom, and by when.",
     },
     {
-      icon: FileText,
-      title: "Design & Documentation",
-      description:
-        "DPR, drawings (arch/struct/MEP), technical specs, BOQ, tender drawings, estimate, approvals/permits, and bid documents aligned to codes/standards.",
+      Icon: BookOpenCheck,
+      title: "Purpose of MOMs",
+      list: [
+        "Capture meeting discussions, decisions, and responsibilities",
+        "Serve as an official record of events and agreements",
+        "Ensure accountability and follow-up on action items",
+        "Facilitate transparency among stakeholders",
+      ],
     },
     {
-      icon: Users,
-      title: "Tendering & Award",
-      description:
-        "Notice publication, pre‑bid meeting, RFI clarifications, tech & financial evaluation, negotiation if allowed, LoA, contract signing (EPC/Item‑rate/Turnkey).",
+      Icon: TrendingUp,
+      title: "Importance of MOMs",
+      list: [
+        "Acts as a formal reference for future meetings",
+        "Provides accountability and clarity of assigned tasks",
+        "Prevents miscommunication or misunderstandings",
+        "Helps in tracking project or operational progress",
+        "Demonstrates professionalism and organizational discipline",
+      ],
     },
     {
-      icon: Hammer,
-      title: "Execution & Monitoring",
-      description:
-        "Mobilization, site setup, method statements, ITPs, construction as per drawings, QA/QC, safety, inspections, progress tracking, measurement & billing.",
+      Icon: FileCheck2,
+      title: "Key Components of MOM",
+      list: [
+        "Meeting Title and Date",
+        "Attendees and Absentees",
+        "Agenda Points",
+        "Discussion Summary",
+        "Decisions Taken",
+        "Action Items with Responsible Persons and Deadlines",
+      ],
     },
     {
-      icon: TrendingUp,
-      title: "Quality Assurance & Control",
-      description:
-        "Material approvals, lab tests, field tests, hold/witness points, NCR & CAPA tracking, audit trails, compliance to IS/IRC/MoRTH or project specs.",
+      Icon: CalendarCheck,
+      title: "MOM Writing Process",
+      list: [
+        "Before Meeting – Prepare agenda and note objectives",
+        "During Meeting – Record key points, decisions, and assigned actions",
+        "After Meeting – Draft, review, and circulate MOM for confirmation",
+        "Follow-Up – Track completion of action points",
+      ],
     },
     {
-      icon: CheckCircle2,
-      title: "Completion, Handover & DLP",
-      description:
-        "Testing & commissioning, snag closure, as‑built drawings, O&M manuals, completion certificate, handover, DLP maintenance & final closure.",
+      Icon: ClipboardList,
+      title: "Example MOM Template",
+      desc:
+        "Date: ____________\nMeeting Title: ____________\nAttendees: ____________\n\nAgenda | Discussion Summary | Action Item | Responsible | Deadline\n-------|--------------------|-------------|-------------|---------\n1. | | | |\n2. | | | |",
+    },
+    {
+      Icon: ClipboardCheck,
+      title: "Sample MOM (Filled Example)",
+      desc:
+        "Date: 12 Oct 2025\nMeeting Title: Project Review – Solar Plant Site\nAttendees: Project Manager, QA Engineer, Site Incharge\n\nAgenda | Discussion | Action Item | Responsible | Deadline\n1. Quality Issues | Discussed corrosion rectification | Submit revised schedule | QA Engineer | 18 Oct 2025\n2. Procurement | Delay in anti-rust coating supply | Follow-up with vendor | Procurement Lead | 20 Oct 2025",
+    },
+    {
+      Icon: ShieldCheck,
+      title: "Do’s & Don’ts",
+      list: [
+        "✅ Be clear and concise; use bullet points; verify names, dates, and tasks; share MOM promptly",
+        "❌ Don’t include personal opinions; don’t omit key decisions; don’t delay circulation; avoid vague language",
+      ],
+    },
+    {
+      Icon: AlertTriangle,
+      title: "Common Mistakes to Avoid",
+      list: [
+        "Missing key decisions or tasks",
+        "Using ambiguous terms like ‘soon’ or ‘ASAP’",
+        "Not updating MOM after changes",
+        "Forgetting to share MOM with all participants",
+        "Poor formatting or inconsistent layout",
+      ],
+    },
+    {
+      Icon: CheckCircle2,
+      title: "Conclusion & Key Takeaways",
+      list: [
+        "MOMs are essential tools for effective communication",
+        "They ensure accountability and follow-up",
+        "Professional MOMs strengthen project management and reporting",
+        "Remember: A good MOM reflects a productive meeting.",
+      ],
     },
   ];
 
-  // 2) Roles & responsibilities
-  const roles = [
+  // ========================= 2) Communication Etiquettes (AICCC) =========================
+  const commCards = [
     {
-      icon: Building2,
-      title: "Owner / Client",
+      Icon: Landmark,
+      title: "Professional Communication Framework",
       list: [
-        "Defines scope & KPIs; secures funding & land.",
-        "Approves designs, variations, time & cost extensions.",
-        "Chairs high‑level reviews; accepts handover & closes project.",
+        "AICCC (Amaravathi Integrated Construction Command Centre)",
+        "Protocol for calls, follow-ups, documentation, and escalation",
       ],
     },
     {
-      icon: ShieldCheck,
-      title: "PMC (Project Management Consultant)",
+      Icon: CalendarCheck,
+      title: "Objective of the Call",
       list: [
-        "Client’s representative for time‑cost‑quality‑safety.",
-        "Reviews designs, approves submittals, manages ITPs & inspections.",
-        "Certifies measurements/bills; manages risks, changes & reporting.",
+        "Ensure timely progress updates from Contractors and PMCs",
+        "Track delays and identify root causes",
+        "Maintain clear communication between site teams and Government",
+        "Strengthen relationships while maintaining accountability",
+        "Record accurate status for daily and weekly reporting",
       ],
     },
     {
-      icon: Users2,
-      title: "Design Consultants",
+      Icon: Users,
+      title: "Role of the Project Coordinator",
       list: [
-        "Prepare DPR/drawings/specs, value engineering & IFC drawings.",
-        "Resolve RFIs, site queries; issue revisions & as‑builts.",
+        "Act as a communication bridge between AICCC management and site teams",
+        "Follow up politely but firmly for updates",
+        "Record responses systematically in the tracker",
+        "Escalate critical issues promptly",
+        "Maintain professionalism at all times",
       ],
     },
     {
-      icon: Workflow,
-      title: "Contractor (Main) & Subcontractors",
+      Icon: ClipboardList,
+      title: "Call Preparation Checklist",
       list: [
-        "Mobilize 4Ms; prepare WBS, schedules, method statements.",
-        "Execute per drawings/specs; ensure QA/QC, EHS compliance.",
-        "Maintain MBs, submit RA/final bills; DLP obligations.",
+        "Review last update and current project status",
+        "Keep project code/name, contact details, and last remarks ready",
+        "Prepare specific questions on work progress and delays",
+        "Ensure call log sheet or CRM is open",
+        "Keep escalation contact handy for urgent issues",
       ],
     },
     {
-      icon: ClipboardList,
-      title: "Engineer‑in‑Charge / Department",
+      Icon: MessageSquare,
+      title: "Sample Script — Progress Check",
+      desc:
+        "“Good morning/afternoon [Name], this is [Your Name] calling from AICCC.\nI’m following up on the current progress for [Project Name]. Could you please share the latest update on:\n• Work completed this week\n• Pending activities\n• Any site issues or material delays?\nThank you — I’ll record this for our weekly progress review.”",
+    },
+    {
+      Icon: MessageSquare,
+      title: "Sample Script — Delay Follow-Up",
+      desc:
+        "“Hello [Name], this is [Your Name] from AICCC.\nWe noticed there’s a delay in [specific activity]. Could you please confirm the reason and revised expected completion date?\nIf any support is needed from our end to resolve this, please let me know so I can inform the concerned department.\nWe appreciate your cooperation in keeping the schedule on track.”",
+    },
+    {
+      Icon: MessageSquare,
+      title: "Sample Script — Escalation",
+      desc:
+        "“Hi [Name], this is [Your Name] from AICCC.\nAs per our previous discussion, [specific work/item] is still pending beyond the expected timeline.\nI’ll need to update relevant ‘Authority’ accordingly. Could you please share an immediate action plan or any support needed to close this?\nWe value your prompt response on this matter.”",
+    },
+    {
+      Icon: FileCheck2,
+      title: "Call Documentation",
       list: [
-        "Day‑to‑day supervision with PMC; site orders & approvals.",
-        "Measurement verification; milestones & penalties/bonuses.",
+        "Record every call (date, time, person, summary)",
+        "Update remarks in Excel/CRM within 10 minutes after the call",
+        "Categorize follow-ups: Progress / Delay / Escalation / Closed",
+        "Highlight unresolved issues for management review",
       ],
     },
     {
-      icon: Truck,
-      title: "Vendors & Suppliers",
+      Icon: BookOpenCheck,
+      title: "Communication Etiquette — Do’s & Don’ts",
       list: [
-        "Supply approved materials/equipment as per specs & QA.",
-        "Provide test certificates, warranties, delivery schedules.",
+        "✅ Greet and introduce yourself clearly; polite but confident tone; listen actively; verify information; thank them",
+        "❌ Avoid informal small talk; don’t promise resolutions you can’t deliver; never leave calls undocumented",
       ],
     },
   ];
 
-  // 3) 4Ms — resources
-  const fourMs = [
+  // ========================= 3) NEW — Construction Project Lifecycle (from user) =========================
+  const lifecycleCards = [
     {
-      icon: Users,
+      Icon: LayoutGrid,
+      title: "🏗️ Lifecycle — Phases",
+      list: [
+        "A) Pre-Construction",
+        "B) Construction (Execution)",
+        "C) Post-Construction",
+      ],
+    },
+    {
+      Icon: Search,
+      title: "A. Pre-Construction — Concept & Feasibility",
+      list: [
+        "Identify need; surveys; financial feasibility",
+        "Environmental clearance; early stakeholder inputs",
+      ],
+    },
+    {
+      Icon: FileText,
+      title: "A. Pre-Construction — Planning & Design",
+      list: [
+        "Prepare DPR (Detailed Project Report)",
+        "Architectural drawings & structural design",
+        "Obtain statutory approvals",
+      ],
+    },
+    {
+      Icon: ClipboardList,
+      title: "A. Pre-Construction — Tendering & Procurement",
+      list: [
+        "Tender docs: BOQ, specs, drawings",
+        "Float tender (open/limited/e-tender)",
+        "Evaluate bids; award to L1 (lowest)",
+        "Contract signing (EPC/Item-rate/Turnkey)",
+      ],
+    },
+    {
+      Icon: Hammer,
+      title: "B. Construction — Mobilization",
+      list: [
+        "Deploy the 4Ms: manpower, machinery, materials, money",
+        "Site layout, safety plan, lab/QC setup, benchmarks",
+      ],
+    },
+    {
+      Icon: Workflow,
+      title: "B. Construction — Execution",
+      list: [
+        "Earthwork → foundation → superstructure → finishes → MEP → commissioning",
+      ],
+    },
+    {
+      Icon: TrendingUp,
+      title: "B. Construction — Monitoring & Control",
+      list: [
+        "PMC supervises time/quality/cost",
+        "Engineer-in-Charge certifies work",
+        "DPRs, MBs, RA bills",
+      ],
+    },
+    {
+      Icon: CheckCircle2,
+      title: "C. Post-Construction",
+      list: [
+        "Testing & commissioning; performance validation",
+        "Handover: as-builts, O&M manuals",
+        "Defects Liability Period (≈1 year); final closure",
+      ],
+    },
+  ];
+
+  // ========================= 4) NEW — Key Roles & Responsibilities (from user) =========================
+  const rolesCards = [
+    {
+      Icon: Users2,
+      title: "PMC — Project Management Consultant",
+      list: [
+        "Acts as client’s representative",
+        "Ensures quality, safety, timelines",
+        "Prepares progress reports; evaluates variations; audits",
+        "Coordinates stakeholders; reviews designs; approves materials; monitors bills",
+      ],
+    },
+    {
+      Icon: Users,
+      title: "Contractor",
+      list: [
+        "Executes per drawings/specs/contract",
+        "Arranges 4Ms; prepares schedules & safety systems",
+        "Submits RA bills; manages subcontractors & logistics",
+      ],
+    },
+    {
+      Icon: Landmark,
+      title: "Other Stakeholders",
+      list: [
+        "Owner/Client — funds & scope",
+        "Consultants — design/structural approvals",
+        "Engineer-in-Charge/Department — supervises & certifies",
+        "Suppliers/Vendors — materials & equipment",
+      ],
+    },
+  ];
+
+  // ========================= 5) NEW — 4Ms of Construction Resources (from user) =========================
+  const fourMCards = [
+    {
+      Icon: Users,
       title: "Manpower",
-      desc:
-        "Skilled/unskilled labour, supervisors, site engineers, safety officers, QA/QC, planners, surveyors; productivity, training & deployment plans.",
+      desc: "Labourers, engineers, supervisors, managers\nExamples: masons, carpenters, welders, site engineers",
     },
     {
-      icon: Construction,
+      Icon: Truck,
       title: "Machinery",
-      desc:
-        "Excavators, transit mixers, batching plants, cranes, scaffolding, formwork systems, testing equipment; uptime, preventive maintenance & spares.",
+      desc: "Tools & equipment required\nExamples: excavators, cranes, batching plants",
     },
     {
-      icon: Package,
+      Icon: Package,
       title: "Materials",
-      desc:
-        "Cement, steel, aggregates, bricks/blocks, bitumen, pipes, MEP items; approvals, storage, traceability, test plans & vendor QC.",
+      desc: "Consumables and construction inputs\nExamples: cement, sand, steel, aggregates",
     },
     {
-      icon: Coins,
+      Icon: Coins,
       title: "Money",
-      desc:
-        "Budgeting, mobilization advance, cash‑flow curves, RA bills, price adjustment/escalation, retention & securities, financial audits.",
+      desc: "Project funds & cash flow\nExamples: budgeting, billing, mobilization advance",
     },
   ];
 
-  // 4) Scheduling relationships
-  const relationships = [
-    {
-      code: "FS",
-      name: "Finish‑to‑Start",
-      icon: GitBranch,
-      example: "Foundation must finish before column casting starts.",
-      note: "Most common dependency; controls sequence to avoid rework.",
-    },
-    {
-      code: "SS",
-      name: "Start‑to‑Start",
-      icon: GitBranch,
-      example: "Excavation and rebar cutting can start together.",
-      note: "Enables overlap for faster delivery; watch resource loading.",
-    },
-    {
-      code: "FF",
-      name: "Finish‑to‑Finish",
-      icon: GitBranch,
-      example: "Electrical & plumbing finishes aligned to finishing works.",
-      note: "Synchronizes completions to maintain area handover dates.",
-    },
-    {
-      code: "SF",
-      name: "Start‑to‑Finish (rare)",
-      icon: GitBranch,
-      example: "Shift handover in operations depends on next crew starting.",
-      note: "Used sparingly; model with care in CPM tools.",
-    },
+  // ========================= 6) NEW — Stages & Phases of Construction (from user) =========================
+  const stagePhaseCards = [
+    { Icon: Search, title: "Planning", list: ["Scope, survey, design brief"] },
+    { Icon: FileText, title: "Design", list: ["Drawings, approvals, estimates"] },
+    { Icon: ClipboardList, title: "Procurement", list: ["Tender, vendor selection, contract"] },
+    { Icon: Construction, title: "Construction", list: ["Site setup, structure, finishing works"] },
+    { Icon: CheckCircle2, title: "Commissioning", list: ["Testing, rectification, certification"] },
+    { Icon: FileCheck2, title: "Closure", list: ["Final payment, documentation, handover"] },
   ];
 
-  // 5) Hindrances (Risk Register categories)
-  const hindrances = [
-    {
-      icon: AlertTriangle,
-      title: "Technical",
-      items: [
-        "Design errors/omissions, utility clashes, unforeseen ground",
-        "Inadequate surveys; scope creep; incompatible specs",
-      ],
-    },
-    {
-      icon: AlertTriangle,
-      title: "Administrative / Approvals",
-      items: [
-        "Delayed permits/NOCs, ROW issues, land acquisition",
-        "Slow decisions/change approvals; interface conflicts",
-      ],
-    },
-    {
-      icon: AlertTriangle,
-      title: "Financial / Commercial",
-      items: [
-        "Delayed payments; price volatility; vendor insolvency",
-        "Inaccurate estimates; inadequate contingencies",
-      ],
-    },
-    {
-      icon: AlertTriangle,
-      title: "Resources & Supply Chain",
-      items: [
-        "Labour shortage/strikes; low productivity",
-        "Late deliveries; quality rejections; logistics constraints",
-      ],
-    },
-    {
-      icon: AlertTriangle,
-      title: "Environment, Health & Safety",
-      items: [
-        "Extreme weather; floods; heat stress; site accidents",
-        "Non‑compliance with EHS leading to stoppages",
-      ],
-    },
-    {
-      icon: AlertTriangle,
-      title: "Legal / Contractual",
-      items: [
-        "Claims/disputes; third‑party litigation; encroachments",
-        "Arbitration & penalties; force majeure events",
-      ],
-    },
+  // ========================= 7) Govt Project Life Cycle (original) =========================
+  const govLifeCards = [
+    { Icon: Landmark, title: "Introduction", list: ["Govt projects form state infrastructure foundation", "AP Departments: APCRDA, ADCL, R&B, Panchayat Raj, Irrigation"] },
+    { Icon: LayoutGrid, title: "Overview — Stages", list: ["1) Conceptualization", "2) Feasibility & DPR", "3) Administrative Approval & Financial Sanction (AA & FS)", "4) Tendering & Procurement", "5) Execution & Supervision", "6) Completion & Handover", "7) Operation & Maintenance"] },
+    { Icon: History, title: "Stage 1: Conceptualization", list: ["Need identified by Departments/local bodies", "Alignment with development goals/Vision 2029", "Preliminary surveys and rough cost estimates", "Approval for DPR preparation"] },
+    { Icon: FileText, title: "Stage 2: Feasibility Study & DPR", list: ["Tech/financial/environmental feasibility", "DPR: design, BOQ, specs, cost analysis", "Review by engineers/consultants", "Submission to Planning Dept/State Committee"] },
+    { Icon: ClipboardCheck, title: "Stage 3: AA & FS", list: ["DPR vetted by Finance & Planning", "Administrative Sanction (AS) by Department", "Financial Sanction (FS) by Finance Dept"] },
+    { Icon: ClipboardList, title: "Stage 4: Tendering & Procurement", list: ["Tender docs: drawings, BOQ, conditions", "e-Tendering via AP e-Procurement", "Technical bid eval → financial opening", "Letter of Acceptance (LoA) & Agreement"] },
+    { Icon: Hammer, title: "Stage 5: Execution & Supervision", list: ["Site handover & mobilization", "Monitored by Dept Engineers/PMC", "Quality control via QCR & 3rd-party checks", "Periodic progress review meetings"] },
+    { Icon: CheckCircle2, title: "Stage 6: Completion & Handover", list: ["Inspection & testing by Department", "Final completion report", "Defect Liability Period (DLP) observed", "Handover to User Dept/Local Authority"] },
+    { Icon: Wrench, title: "Stage 7: O&M", list: ["Routine/annual maintenance", "Performance audits (State Audit/CAG)", "Feedback loop to improve future planning"] },
   ];
 
-  // 6) PMC vs Contractor — work stages matrix
-  const workStages = [
-    {
-      stage: "Pre‑Construction",
-      pmc: [
-        "Design review & constructability; approvals plan",
-        "Tender support & evaluation; kick‑off & mobilization checks",
-      ],
-      contractor: [
-        "Mobilization (4Ms), site layout, temporary works",
-        "Submittals: method statements, ITPs, drawings & samples",
-      ],
-    },
-    {
-      stage: "Construction",
-      pmc: [
-        "Supervision, inspections (hold/witness), DPRs, audits",
-        "Progress reviews, risk & change control, measurement certs",
-      ],
-      contractor: [
-        "Execute per IFC drawings/specs; QA/QC, EHS, logistics",
-        "Maintain MBs, test records; submit RA bills; manage subs",
-      ],
-    },
-    {
-      stage: "Testing & Handover",
-      pmc: [
-        "Review test packs; punch list & closure; statutory clearances",
-        "Certify completion; accept O&M manuals & as‑builts",
-      ],
-      contractor: [
-        "Pre‑commissioning/commissioning; snag rectification",
-        "Submit as‑builts, warranties; train O&M team",
-      ],
-    },
-    {
-      stage: "DLP & Close‑Out",
-      pmc: [
-        "Monitor DLP performance; verify defect rectification",
-        "Recommend final payments; close contracts & archives",
-      ],
-      contractor: [
-        "Attend defects; periodic checks as per contract",
-        "Apply for securities release; demobilize site",
-      ],
-    },
+  // ========================= 8) Road Construction Sequence (original) =========================
+  const roadCards = [
+    { Icon: Map, title: "Overview of Road Construction", list: ["Follows IRC & MoRTH standards", "Classes: NH, SH, MDR, Rural Roads"] },
+    { Icon: Search, title: "Preliminary Works & Surveying", list: ["Topographic/contour survey", "Soil investigation & CBR test", "Alignment marking (total station)", "DPR & approvals"] },
+    { Icon: Construction, title: "Site Preparation & Setting Out", list: ["Clearing & grubbing", "Removal of topsoil", "Set centerline & benchmarks", "Barricading & traffic management"] },
+    { Icon: Package, title: "Earthwork in Embankment", list: ["Material per MoRTH Sec 300", "Layer-wise fill (200–250 mm)", "95% MDD (Proctor)", "Side slope protection & turfing"] },
+    { Icon: Package, title: "Subgrade Preparation", list: ["Dress/level to profile", "97% MDD; CBR > 8% (highways)", "Density & moisture QC"] },
+    { Icon: Package, title: "Granular Sub-Base (GSB)", list: ["Grading as per MoRTH Table 400-1", "Spread/mix/compact in 150–200 mm layers", "Compaction at OMC"] },
+    { Icon: Construction, title: "Wet Mix Macadam (WMM)", list: ["Plant-mixed; paver-laid", "Compacted by vibratory roller", "Thickness per design (~250 mm)", "Surface tolerance ±10 mm"] },
+    { Icon: Construction, title: "Prime & Tack Coats", list: ["Prime: emulsion SS-1 on GSB", "Tack: on WMM/DBM before overlay", "MoRTH 503: 0.25–0.3 kg/m²", "Ensure clean & dry surface"] },
+    { Icon: Construction, title: "DBM — Dense Bituminous Macadam", list: ["Binder: VG-30/VG-40", "Hot-mix, lay at 140–160°C", "Compaction to 98% density", "Thickness 50–100 mm"] },
+    { Icon: Construction, title: "BC — Bituminous Concrete", list: ["Wearing course; nominal aggregate 13–19 mm", "VG-30/40 or modified bitumen", "Compaction to 98% density"] },
+    { Icon: LayoutGrid, title: "Flexible vs Rigid Pavement", list: ["Flexible: bituminous, cheaper, shorter life", "Rigid: CC base, higher cost, long life, low maintenance"] },
+    { Icon: Building, title: "Rigid Pavement Sequence", list: ["Subgrade & DLC prep", "Reinforcement placement", "PQC via slipform paver", "Dowel/tie bars; curing & joints"] },
+    { Icon: Package, title: "DLC Sub-base", list: ["Thickness 150–200 mm", "Cement > 150 kg/m³", "Paver & roller compaction", "7-day curing before PQC"] },
+    { Icon: Building, title: "PQC (M40–M50)", list: ["Panels with dowels at joints", "Needle/surface vibrators", "Continuous curing × 14 days"] },
+    { Icon: ClipboardCheck, title: "Joint Formation & Sealing", list: ["Cut joints within 12 hours", "Seal with polysulphide/silicone", "Load transfer via dowels", "Prevent cracking & water ingress"] },
+    { Icon: Truck, title: "Shoulders, Drainage & Furniture", list: ["Shoulders: granular/paved, slope 2.5%", "Surface/subsurface drains; perforated pipes", "Signs/guardrails/thermoplastic markings", "Barriers as per IRC:67"] },
+    { Icon: BookOpenCheck, title: "Quality Control & Testing", list: ["Field density (sand replacement/core cutter)", "CBR, gradation, bitumen content", "Marshall Stability & cube strength", "QA/QC record keeping"] },
+    { Icon: ShieldCheck, title: "Safety & Traffic Management", list: ["Diversion plan, PPE, signage", "Regular toolbox talks", "Follow IRC:SP:55"] },
+    { Icon: CheckCircle2, title: "Completion & Maintenance", list: ["Final finishing & markings", "Joint inspection & approval", "Crack/pothole maintenance; periodic overlays"] },
   ];
 
-  // 7) Key documents & registers (quick reference)
-  const documents = [
-    {
-      icon: FileCheck2,
-      title: "Planning & Design",
-      list: [
-        "Project Charter, Stakeholder Register, WBS",
-        "DPR, IFC Drawings, Specs, BOQ, Cost Estimates",
-        "Permits/NOCs, Environmental & Social Management Plan",
-      ],
-    },
-    {
-      icon: CalendarCheck,
-      title: "Scheduling & Control",
-      list: [
-        "Baseline & Updated Schedules (Gantt/CPM)",
-        "Look‑Ahead Plans, S‑Curves, Resource Histograms",
-        "Risk Register, Change/Variation Register",
-      ],
-    },
-    {
-      icon: BookOpenCheck,
-      title: "Quality & Safety",
-      list: [
-        "QA/QC Plan, ITPs, Checklists, Test Reports",
-        "Site Order Book, NCR & CAPA Logs, Calibration Records",
-        "Safety Plan, JSA/JHA, TBT records, Incident Logs",
-      ],
-    },
-    {
-      icon: Coins,
-      title: "Commercial & Billing",
-      list: [
-        "Contract Agreement, Insurances, Bank Guarantees",
-        "Measurement Books (MB), RA/Final Bills, Price Adjustments",
-        "Reconciliations, Cash‑flow, Audit Files",
-      ],
-    },
+  // ========================= 9) High-Rise Building Sequence (original) =========================
+  const highriseCards = [
+    { Icon: Building2, title: "Structural Systems", list: ["RCC framed (most common)", "Steel/Composite (IT parks/metros)", "Trade-offs: cost, speed, seismic performance"] },
+    { Icon: ClipboardList, title: "Planning & Approvals", list: ["Land acquisition; local approvals", "Environmental clearances", "NOCs: Fire/Airport/Environment/Water/PCB"] },
+    { Icon: Search, title: "Site Preparation & Surveying", list: ["Topographic & grid survey", "Site fencing & access roads", "Soil investigation: SPT, bore logs, SBC", "Camps, site office, utilities setup"] },
+    { Icon: Construction, title: "Excavation & Earth Retention", list: ["Open-cut with stabilization", "Shoring: sheet pile, soldier pile, shotcrete", "Dewatering: sump/well points; PCB-compliant disposal"] },
+    { Icon: Package, title: "Foundations (India)", list: ["Pile: bored cast-in-situ, under-reamed", "Raft for tower/podium", "Pile load tests (IS 2911)", "Tremie concreting, rebar lowering"] },
+    { Icon: Hammer, title: "Basement Construction", list: ["Retaining + waterproof membrane", "Raft casting, pedestals, column starters", "Basement slab, backfilling, water-proof testing"] },
+    { Icon: Building2, title: "RCC Frame Construction", list: ["Column-beam-slab cycle; Mivan/aluminium formwork", "7-day floor cycles with planning", "Core/shear walls via jumpform"] },
+    { Icon: Construction, title: "Steel Structures", list: ["IS 800; bolted connections", "Crane erection; alignment & torque tests", "Deck slab with shear connectors"] },
+    { Icon: ClipboardList, title: "Formwork & Lifting", list: ["Plywood/props for small works", "Mivan/aluminium for repetitive floors", "Jumpform/self-climbing for cores", "Tower cranes, hoists, pump lines/boom placers"] },
+    { Icon: Package, title: "Masonry & Partitions", list: ["AAC/CLC blocks", "Mortar, curing, lintel & sill casting", "Fire-rated separations for offices"] },
+    { Icon: Construction, title: "MEP Services", list: ["Plumbing, HVAC, Electrical, Fire", "Risers/duct routing", "Testing: IS 2065 (plumbing), IS 1646 (fire)"] },
+    { Icon: Building, title: "Façade & External Finishes", list: ["Curtain wall/ACP/glass (offices)", "Plaster/paint/balcony rails (residential)", "Façade anchoring safety; cradle access"] },
+    { Icon: Building, title: "Interior Finishes (Residential)", list: ["Flooring (vitrified/marble), painting", "Doors/windows fitting", "Bathroom waterproofing (IS 3067)", "Kitchen, joinery, false ceilings"] },
+    { Icon: Building, title: "Interior Finishes (Commercial)", list: ["Raised flooring, grid ceiling", "HVAC diffusers", "Data cabling, server room, BMS", "Lighting & final finishes"] },
+    { Icon: Map, title: "External Development", list: ["Compound wall, kerbs, road paving, drainage", "STP, OHT, sump", "Landscaping & external lighting"] },
+    { Icon: BookOpenCheck, title: "Quality Control", list: ["QA/QC lab, cube tests, NDTs", "Slump/rebar checks", "IS 10262 mix designs; material approvals", "Stage-wise inspections & documentation"] },
+    { Icon: ShieldCheck, title: "Safety Management", list: ["PPE, scaffolding, height work permits", "Lifting plans, crane inspection, fire safety", "Emergency response & mock drills"] },
+    { Icon: CheckCircle2, title: "Testing, Commissioning & Handover", list: ["MEP T&C reports", "Snag rectification", "As-builts & O&M manuals", "Joint walkthrough; Occupancy Certificate"] },
+    { Icon: TrendingUp, title: "Summary & Discussion", list: ["Flow: Planning → Substructure → Superstructure → Finishes → Handover", "Success: safety, coordination, cycle time optimization"] },
   ];
 
-  // Assemble the learning path sections
-  const path = useMemo(
+  // ========================= 10) Construction Project Management (Overview) (original) =========================
+  const cpmCards = [
+    { Icon: FileText, title: "Introduction", desc: "CPM involves planning, coordination, and control from inception to completion—delivering scope within schedule and budget while meeting quality and safety standards." },
+    { Icon: TrendingUp, title: "Key Objectives", list: ["Deliver within scope, time, budget", "Ensure quality compliance", "Enhance stakeholder satisfaction", "Promote safety & sustainability", "Achieve operational efficiency"] },
+    { Icon: LayoutGrid, title: "Project Life Cycle", list: ["1) Initiation", "2) Planning", "3) Execution", "4) Monitoring & Control", "5) Closure"] },
+    { Icon: Users, title: "Stakeholders", list: ["Client/Owner", "Project Manager/PMC", "Architect & Design Consultants", "Contractors & Subcontractors", "Suppliers & Vendors", "Government/Statutory Bodies", "End Users/Community"] },
+    { Icon: ClipboardList, title: "Key Functions", list: ["Scope", "Schedule", "Cost", "Quality", "Resource & Procurement", "Risk", "Communication & Documentation"] },
+    { Icon: CalendarCheck, title: "Planning Tools & Techniques", list: ["Work Breakdown Structure (WBS)", "CPM & PERT", "Gantt Charts", "MS Project, Primavera, BIM Integration"] },
+    { Icon: BookOpenCheck, title: "Monitoring & Control", list: ["Track progress vs plan", "Earned Value Management (EVM)", "Change control", "Continuous reporting to stakeholders"] },
+    { Icon: AlertTriangle, title: "Challenges", list: ["Cost overruns (estimation errors)", "Schedule delays (design/procurement)", "Multi-stakeholder coordination", "Unforeseen site conditions", "Regulatory/environmental compliance"] },
+    { Icon: ShieldCheck, title: "Role of Project Manager", list: ["Leadership & coordination", "Decision-making & problem-solving", "Documentation & records", "Safety, quality & risk oversight"] },
+    { Icon: CheckCircle2, title: "Case Example — Solar Plant", list: ["Planning: design finalization, stakeholder engagement", "Execution: logistics & resource scheduling", "Monitoring: timely completion with quality parameters"] },
+    { Icon: BookOpenCheck, title: "Summary & Takeaways", list: ["Integrates multiple disciplines", "Structured planning/coordination/control drive success", "Trends: digitalization, BIM, AI-based monitoring", "Continuous learning & adaptation"] },
+  ];
+
+  // ========================= 11) Project Scheduling (original + PERT/CPM ties) =========================
+  const schedulingIntro = [
+    { Icon: FileText, title: "Introduction to Scheduling", list: ["Defines timeline for activities and milestones", "Ensures planning, monitoring, and control", "Coordinates resources; tracks progress; forecasts completion"] },
+    { Icon: TrendingUp, title: "Importance in Construction", list: ["Optimizes resource utilization", "Identifies delays/risks early", "Aids stakeholder communication", "Forms baseline for progress measurement"] },
+    { Icon: LayoutGrid, title: "Work Breakdown Structure (WBS)", list: ["Hierarchical decomposition of scope", "Deliverables → work packages", "Responsibility & cost tracking", "Example: L1 Project → L2 Substructure → L3 Footings"] },
+    { Icon: ClipboardCheck, title: "WBS ↔ Schedule Relationship", list: ["Each WBS element maps to scheduled tasks", "Provides structure for cost/progress control", "Ensures logical sequencing & complete coverage", "Foundation for L1–L3 and beyond"] },
+    { Icon: CalendarCheck, title: "L1 / L2 / L3 Schedules", list: ["L1: High-level phases & milestones (management view)", "L2: Discipline/package-wise breakdown with milestones", "L3: Detailed activities, durations, dependencies (daily/weekly control)", "Linked to resources, manpower, and cost systems"] },
+  ];
+
+  const schedulingRels = [
+    { code: "FS", name: "Finish-to-Start", Icon: GitBranch, example: "Foundation must finish before column casting starts.", note: "Most common dependency; prevents rework." },
+    { code: "SS", name: "Start-to-Start", Icon: GitBranch, example: "Excavation and rebar cutting can start together.", note: "Enables overlap to accelerate delivery; watch resource loading." },
+    { code: "FF", name: "Finish-to-Finish", Icon: GitBranch, example: "Electrical and plumbing finishing together.", note: "Synchronizes completions for area handover dates." },
+    { code: "SF", name: "Start-to-Finish (rare)", Icon: GitBranch, example: "Backup generator commissioning depends on main supply start.", note: "Used sparingly; model carefully." },
+  ];
+
+  const schedulingCtrl = [
+    { Icon: ClipboardList, title: "Leads, Lags & Examples", desc: "Leads/lags modify activity overlap.\nExample: Plastering (SS + 2 days) with Masonry → plastering starts 2 days after masonry begins." },
+    { Icon: ClipboardCheck, title: "Integration & Control", list: ["Integrate schedule with procurement, cost & resources", "Update progress → drive reporting & corrective actions", "Variance analysis to identify deviations", "Tools: MS Project, Primavera P6, Excel dashboards"] },
+  ];
+
+  // ========================= 12) NEW — Hindrances in Construction Projects (from user) =========================
+  const hindranceCards = [
+    { Icon: AlertTriangle, title: "Technical", desc: "Examples: design errors, scope change, site mismatch\nImpact: delays, rework" },
+    { Icon: Coins, title: "Financial", desc: "Examples: late payment, cost overrun\nImpact: cash flow issues" },
+    { Icon: Landmark, title: "Administrative", desc: "Examples: delayed approvals, poor coordination\nImpact: work stoppage" },
+    { Icon: Map, title: "Environmental", desc: "Examples: rain, floods, extreme weather\nImpact: site downtime" },
+    { Icon: History, title: "Legal / Land", desc: "Examples: court cases, encroachments\nImpact: halted progress" },
+    { Icon: Users2, title: "Manpower / Labor", desc: "Examples: shortage, strikes\nImpact: reduced productivity" },
+    { Icon: Package, title: "Material Supply", desc: "Examples: shortage, poor quality\nImpact: delays, quality compromise" },
+  ];
+
+  // ========================= 13) NEW — PMC & Contractor Work Stages (from user) =========================
+  const pmcContractorFlowCards = [
+    { Icon: Workflow, title: "Pre-Construction", desc: "PMC: design review, tender evaluation, mobilization check\nContractor: resource mobilization, site setup" },
+    { Icon: Construction, title: "Construction", desc: "PMC: supervision, progress reporting, quality check\nContractor: execution, daily reporting, safety compliance" },
+    { Icon: FileCheck2, title: "Billing Stage", desc: "PMC: certify measurements, approve RA bills\nContractor: prepare MB, submit bills" },
+    { Icon: CheckCircle2, title: "Testing & Handover", desc: "PMC: approve testing, monitor DLP\nContractor: perform testing, submit as-built drawings" },
+  ];
+
+  // ========================= 14) NEW — Construction Management Tools & Documents (from user) =========================
+  const toolsDocsCards = [
+    { Icon: ClipboardList, title: "Planning", list: ["Project charter", "Work Breakdown Structure (WBS)", "Gantt chart"] },
+    { Icon: ShieldCheck, title: "Quality", list: ["QA/QC plan", "Inspection reports"] },
+    { Icon: Coins, title: "Cost Control", list: ["BOQ", "Estimates", "RA bills", "Budget tracking"] },
+    { Icon: AlertTriangle, title: "Safety", list: ["Safety manual", "Tool Box Talks", "PPE records"] },
+    { Icon: MessageSquare, title: "Communication", list: ["Progress reports", "MOMs (Minutes of Meetings)"] },
+  ];
+
+  // ========================= 15) NEW — Practical Example (Water Supply Project) (from user) =========================
+  const waterExampleCards = [
+    { Icon: Search, title: "Pre-Construction", list: ["DPR → Tender → Contractor Appointment"] },
+    { Icon: Workflow, title: "Construction", list: ["Excavation → Pipe Laying → Jointing → Testing"] },
+    { Icon: CheckCircle2, title: "Post-Construction", list: ["Commissioning → Handover → DLP"] },
+  ];
+
+  // ========================= Build sections (WITH NEW INSERTS) =========================
+  const sections = useMemo(
     () => [
-      { id: "phases", title: "Pre‑, During‑ & Post‑Construction", subtitle: "Follow these milestones to understand the full lifecycle", cards: phases.map((p) => ({ Icon: p.icon, title: p.title, desc: p.description })) },
-      { id: "roles", title: "Stakeholders & Roles", subtitle: "Who does what across the project?", cards: roles.map((r) => ({ Icon: r.icon, title: r.title, list: r.list })) },
-      { id: "ms", title: "4Ms — Resources", subtitle: "Manpower, Machinery, Materials, Money", cards: fourMs.map((m) => ({ Icon: m.icon, title: m.title, desc: m.desc })) },
-      { id: "schedule", title: "Scheduling Dependencies (CPM/PERT)", subtitle: "How activities relate and overlap", cards: relationships.map((rel) => ({ Icon: rel.icon, title: `${rel.code} — ${rel.name}`, desc: `${rel.note}\nExample: ${rel.example}` })) },
-      { id: "hindrances", title: "Hindrances (Delay/Risk Library)", subtitle: "Watch‑outs & typical blockers", cards: hindrances.map((h) => ({ Icon: h.icon, title: h.title, list: h.items })) },
-      { id: "stages", title: "PMC vs Contractor — Work Stages", subtitle: "Parallel responsibilities by stage", cards: workStages.map((ws) => ({ title: ws.stage, list: ["PMC: "+ws.pmc.join("; "), "Contractor: "+ws.contractor.join("; ")] })) },
-      { id: "docs", title: "Key Documents & Registers", subtitle: "What to prepare, track and archive", cards: documents.map((d) => ({ Icon: d.icon, title: d.title, list: d.list })) },
+      { id: "moms", title: "Minutes of Meeting (MOMs)", subtitle: "Effective documentation for productive meetings", cards: momCards },
+      { id: "comm-etiquette", title: "Communication Etiquettes", subtitle: "AICCC — professional communication framework", cards: commCards },
+
+      // NEW inserts based on user's data
+      { id: "lifecycle-overview", title: "Construction Project Lifecycle — Overview", subtitle: "Pre → Execution → Post with control gates", cards: lifecycleCards },
+      { id: "roles", title: "Key Roles & Responsibilities", subtitle: "PMC, Contractor & other stakeholders", cards: rolesCards },
+      { id: "4ms", title: "The 4Ms of Construction Resources", subtitle: "Manpower · Machinery · Materials · Money", cards: fourMCards },
+      { id: "stages-phases", title: "Stages & Phases of Construction", subtitle: "Planning, Design, Procurement, Construction, Commissioning, Closure", cards: stagePhaseCards },
+
+      { id: "govt-life-cycle", title: "Life Cycle of a Typical Government Project", subtitle: "From concept to commissioning (AP context)", cards: govLifeCards },
+      { id: "roads-sequence", title: "Construction Sequence of Roads", subtitle: "As per IRC & MoRTH guidelines", cards: roadCards },
+      { id: "highrise-sequence", title: "Construction Sequence of High-Rise Buildings", subtitle: "Office & residential projects — training module", cards: highriseCards },
+      { id: "cpm-overview", title: "Overview of Construction Project Management", subtitle: "Comprehensive academic perspective", cards: cpmCards },
+      {
+        id: "project-scheduling",
+        title: "Project Scheduling",
+        subtitle: "WBS, L1–L3, relationships, integration & control",
+        cards: [
+          ...schedulingIntro,
+          ...schedulingRels.map((r) => ({ Icon: r.Icon, title: `${r.code} — ${r.name}`, desc: `${r.note}\nExample: ${r.example}` })),
+          ...schedulingCtrl,
+        ],
+      },
+
+      // NEW hindrances + PMC/Contractor flow + tools + example
+      { id: "hindrances", title: "Hindrances in Construction Projects", subtitle: "Typical blockers, their examples and impact", cards: hindranceCards },
+      { id: "pmc-contractor-flow", title: "PMC & Contractor — Work Stages", subtitle: "Who does what at each stage", cards: pmcContractorFlowCards },
+      { id: "tools-docs", title: "Construction Management Tools & Documents", subtitle: "Planning · Quality · Cost · Safety · Communication", cards: toolsDocsCards },
+      { id: "water-example", title: "Practical Example — Water Supply Project", subtitle: "End-to-end snapshot", cards: waterExampleCards },
     ],
     []
   );
 
+  // Nav indicator
   const [active, setActive] = useState(0);
-  const total = path.length;
-
-  // Neon slider indicator logic for tab bar
+  const total = sections.length;
   const tabRefs = useRef<HTMLButtonElement[]>([]);
   const [indicator, setIndicator] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
+
   const updateIndicator = () => {
     const el = tabRefs.current[active];
     if (el) setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
   };
+
   useEffect(() => {
     updateIndicator();
     const onResize = () => updateIndicator();
@@ -418,227 +634,66 @@ const ProjectCycle = () => {
               Government Project Construction Cycle
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Learn the full journey in bite‑sized cards — phases, roles, 4Ms, dependencies, hindrances, PMC vs Contractor, and the key documents.
+              <br /> Perfect for AICCC coordinators, site engineers, and project managers.
             </p>
           </motion.div>
 
-          
-
-          {/* Top step nav */}
-<nav className="relative mb-6 sticky top-20 z-30" role="tablist" aria-label="Learning path sections">
-<div className="relative rounded-2xl bg-gradient-to-r from-cyan-400 via-blue-600 to-black shadow-[0_0_20px_rgba(0,255,255,.35),0_0_40px_rgba(59,130,246,.25)] ring-1 ring-cyan-300/30 backdrop-blur overflow-x-auto no-scrollbar">
-<motion.div
-className="absolute top-0 bottom-0 rounded-xl pointer-events-none"
-animate={{ left: indicator.left, width: indicator.width }}
-transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-style={{
-background: 'linear-gradient(90deg, rgba(255,255,255,.95) 0%, rgba(0,255,255,.35) 100%)',
-boxShadow: '0 0 18px rgba(0,255,255,.6), 0 0 36px rgba(59,130,246,.35)',
-}}
-/>
-<div className="flex items-center gap-2 snap-x snap-mandatory px-3 py-2">
-{path.map((s, i) => (
-<button
-key={s.id}
-onClick={() => setActive(i)}
-role="tab"
-aria-selected={i === active}
-ref={(el) => (tabRefs.current[i] = el as HTMLButtonElement)}
-className={`relative z-10 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-sm transition focus:outline-none focus:ring-2 focus:ring-cyan-300/40 ${
-i === active ? 'text-slate-900 bg-white/80' : 'text-cyan-50/90 hover:text-white'
-}`}
->
-{i + 1}. {s.title}
-</button>
-))}
-</div>
-</div>
-</nav>
-
-          {/* Active section */}
-          <motion.div key={active} {...fadeUp(0.05)}>
-            <SectionHeader k={active + 1} title={path[active].title} subtitle={path[active].subtitle} />
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {path[active].cards.map((c: any, idx: number) => (
-                <LearnCard key={idx} {...c} />
-              ))}
+          {/* Tab Nav */}
+          <nav className="relative mb-6 sticky top-20 z-30" role="tablist" aria-label="Sections">
+            <div className="relative rounded-2xl bg-gradient-to-r from-cyan-400 via-blue-600 to-black shadow-[0_0_20px_rgba(0,255,255,.35),0_0_40px_rgba(59,130,246,.25)] ring-1 ring-cyan-300/30 backdrop-blur overflow-x-auto">
+              <motion.div
+                className="absolute top-0 bottom-0 rounded-xl pointer-events-none"
+                animate={{ left: indicator.left, width: indicator.width }}
+                transition={{ type: "spring", stiffness: 420, damping: 32 }}
+                style={{
+                  background: "linear-gradient(90deg, rgba(255,255,255,.95) 0%, rgba(0,255,255,.35) 100%)",
+                  boxShadow: "0 0 18px rgba(0,255,255,.6), 0 0 36px rgba(59,130,246,.35)",
+                }}
+              />
+              <div className="flex items-center gap-2 px-3 py-2">
+                {sections.map((s, i) => (
+                  <button
+                    key={s.id}
+                    onClick={() => setActive(i)}
+                    role="tab"
+                    aria-selected={i === active}
+                    ref={(el) => (tabRefs.current[i] = el as HTMLButtonElement)}
+                    className={`relative z-10 whitespace-nowrap px-4 py-2 rounded-xl text-sm transition focus:outline-none focus:ring-2 focus:ring-cyan-300/40 ${
+                      i === active ? "text-slate-900 bg-white/80" : "text-cyan-50/90 hover:text-white"
+                    }`}
+                  >
+                    {i + 1}. {s.title}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="flex items-center justify-between gap-3">
-              <button
-                onClick={go(-1)}
-                disabled={active === 0}
-                className="px-4 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-50"
-              >
+          </nav>
+
+          {/* Active Section */}
+          <motion.div key={active} {...fadeUp(0.05)}>
+            <SectionHeader k={active + 1} title={sections[active].title} subtitle={sections[active].subtitle} />
+
+            {/* Scrollable grid wrapper for big content */}
+            <div className="relative">
+              <div className="scroll-container grid md:grid-cols-2 lg:grid-cols-3 gap-6 pr-2 max-h-[72vh] overflow-y-auto">
+                {sections[active].cards.map((c: any, idx: number) => (
+                  <LearnCard key={idx} Icon={c.Icon} title={c.title} desc={c.desc} list={c.list} />
+                ))}
+              </div>
+            </div>
+
+            {/* Pager */}
+            <div className="flex items-center justify-between gap-3 mt-6">
+              <button onClick={go(-1)} disabled={active === 0} className="px-4 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-50">
                 ← Previous
               </button>
-              <button
-                onClick={go(1)}
-                disabled={active === total - 1}
-                className="px-4 py-2 rounded-lg border border-primary bg-primary/90 text-white hover:bg-primary"
-              >
+              <button onClick={go(1)} disabled={active === total - 1} className="px-4 py-2 rounded-lg border border-primary bg-primary/90 text-white hover:bg-primary">
                 Next →
               </button>
             </div>
           </motion.div>
-
-          {/* Footer note */}
-          <motion.div {...fadeUp(0.08)} className="max-w-4xl mx-auto mt-12">
-            <GlassCard>
-              <h3 className="text-xl font-semibold mb-2">Compliance & Transparency</h3>
-              <p className="text-muted-foreground">
-                Ensure adherence to codes and statutory approvals, maintain complete records (MBs, test certificates, site orders, RFIs), and conduct periodic audits. Track KPIs across time, cost, quality, and safety with clear escalation paths and issue logs.
-              </p>
-            </GlassCard>
-          </motion.div>
         </div>
       </section>
     </Layout>
-  );
-};
-
-export default ProjectCycle;
-
-// ────────────────────────────────────────────────────────────────────────────────
-// Showcase-only: per-section Learning Path components
-// Use these on separate routes or embed them anywhere in your site.
-// Example: import { PhasesPath } from "./ProjectCycle";
-// ────────────────────────────────────────────────────────────────────────────────
-
-export function PhasesPath() {
-  const cards = [
-    { Icon: Search, title: "Planning & Feasibility", desc: "Needs, surveys, feasibility, prelim cost, E&S screening, approvals." },
-    { Icon: FileText, title: "Design & Documentation", desc: "DPR, drawings/specs, BOQ, permits, bid docs to codes/standards." },
-    { Icon: Users, title: "Tendering & Award", desc: "Notice, pre-bid, clarifications, tech/fin eval, LoA & contract." },
-    { Icon: Hammer, title: "Execution & Monitoring", desc: "Mobilization, ITPs, QA/QC, EHS, measurements, billing, progress." },
-    { Icon: TrendingUp, title: "Quality Assurance & Control", desc: "Lab/field tests, hold/witness, NCR/CAPA, audits, compliance." },
-    { Icon: CheckCircle2, title: "Completion, Handover & DLP", desc: "Commissioning, snags, as-builts, O&M, completion, DLP closure." },
-  ];
-  return (
-    <section className="py-8">
-      <h2 className="text-2xl font-semibold mb-6">Learning Path — Phases</h2>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cards.map((c, i) => (
-          <LearnCard key={i} {...c} />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-export function RolesPath() {
-  const cards = [
-    { Icon: Building2, title: "Owner / Client", list: ["Scope/KPIs & funding","Approvals/variations","Final acceptance & closure"] },
-    { Icon: ShieldCheck, title: "PMC", list: ["Time/Cost/Quality/Safety","Submittals & inspections","Certify MB/bills; risks & changes"] },
-    { Icon: Users2, title: "Design Consultants", list: ["DPR/drawings/specs","RFIs & revisions","As-builts"] },
-    { Icon: Workflow, title: "Contractor", list: ["Mobilize 4Ms, WBS & methods","Execute per IFC + QA/QC/EHS","MBs, RA bills, DLP"] },
-    { Icon: ClipboardList, title: "Engineer-in-Charge", list: ["Daily supervision","Site orders/approvals","Verify measurements"] },
-    { Icon: Truck, title: "Vendors/Suppliers", list: ["Spec-compliant supply","Test certs & warranties","Delivery plans"] },
-  ];
-  return (
-    <section className="py-8">
-      <h2 className="text-2xl font-semibold mb-6">Learning Path — Roles</h2>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cards.map((c, i) => (
-          <LearnCard key={i} {...c} />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-export function ResourcesPath() {
-  const cards = [
-    { Icon: Users, title: "Manpower", desc: "Labour, engineers, QA/QC, safety, planners; deployment & productivity." },
-    { Icon: Construction, title: "Machinery", desc: "Excavators, mixers, batching, cranes, formwork; uptime & PM." },
-    { Icon: Package, title: "Materials", desc: "Cement, steel, aggregates, pipes, MEP; approvals, storage, tests." },
-    { Icon: Coins, title: "Money", desc: "Budget, cash-flows, RA bills, escalation, retention, audits." },
-  ];
-  return (
-    <section className="py-8">
-      <h2 className="text-2xl font-semibold mb-6">Learning Path — 4Ms</h2>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {cards.map((c, i) => (
-          <LearnCard key={i} {...c} />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-export function SchedulePath() {
-  const cards = [
-    { Icon: GitBranch, title: "FS — Finish to Start", desc: "B starts after A finishes. Ex: foundation → columns." },
-    { Icon: GitBranch, title: "SS — Start to Start", desc: "B can start when A starts. Ex: excavation + rebar cutting." },
-    { Icon: GitBranch, title: "FF — Finish to Finish", desc: "B finishes when A finishes. Ex: MEP finishes with interiors." },
-    { Icon: GitBranch, title: "SF — Start to Finish", desc: "Rare: B can't finish until A starts. Shift handover." },
-  ];
-  return (
-    <section className="py-8">
-      <h2 className="text-2xl font-semibold mb-6">Learning Path — Scheduling</h2>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {cards.map((c, i) => (
-          <LearnCard key={i} {...c} />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-export function HindrancesPath() {
-  const cards = [
-    { Icon: AlertTriangle, title: "Technical", list: ["Design omissions","Utility clashes","Unforeseen ground"] },
-    { Icon: AlertTriangle, title: "Administrative", list: ["Permits/NOCs delays","ROW & land","Slow decisions"] },
-    { Icon: AlertTriangle, title: "Financial", list: ["Payment delays","Price volatility","Vendor insolvency"] },
-    { Icon: AlertTriangle, title: "Resources & Supply", list: ["Labour shortage","Late deliveries","Quality rejections"] },
-    { Icon: AlertTriangle, title: "EHS / Environment", list: ["Weather/floods","Accidents","Non-compliance"] },
-    { Icon: AlertTriangle, title: "Legal / Contract", list: ["Claims/litigation","Encroachments","Arbitration"] },
-  ];
-  return (
-    <section className="py-8">
-      <h2 className="text-2xl font-semibold mb-6">Learning Path — Hindrances</h2>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cards.map((c, i) => (
-          <LearnCard key={i} {...c} />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-export function StagesPath() {
-  const cards = [
-    { title: "Pre-Construction", list: ["PMC: Constructability, approvals, tender support, mobilization checks","Contractor: 4Ms mobilization, temp works, method/ITP submittals"] },
-    { title: "Construction", list: ["PMC: Inspections, DPRs, risk/change, certify measurements","Contractor: Execute IFC, QA/QC & EHS, MBs/tests, RA bills"] },
-    { title: "Testing & Handover", list: ["PMC: Test packs, punch list closure, clearances, completion","Contractor: Commissioning, snags, as-builts, O&M, training"] },
-    { title: "DLP & Close-Out", list: ["PMC: Monitor DLP, verify rectifications, recommend final pay","Contractor: Attend defects, periodic checks, release securities"] },
-  ];
-  return (
-    <section className="py-8">
-      <h2 className="text-2xl font-semibold mb-6">Learning Path — PMC vs Contractor</h2>
-      <div className="grid sm:grid-cols-2 gap-6">
-        {cards.map((c, i) => (
-          <LearnCard key={i} {...c} />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-export function DocumentsPath() {
-  const cards = [
-    { Icon: FileCheck2, title: "Planning & Design", list: ["Charter, Stakeholder Register, WBS","DPR, Drawings, Specs, BOQ, Estimates","Permits/NOCs, ESMP"] },
-    { Icon: CalendarCheck, title: "Scheduling & Control", list: ["Baseline/Updates, Look-ahead","S-curves, Resource histograms","Risk & Change registers"] },
-    { Icon: BookOpenCheck, title: "Quality & Safety", list: ["QA/QC Plan, ITPs, Checklists, Tests","Site order, NCR/CAPA, Calibration","Safety plan, JSA/TBT, Incidents"] },
-    { Icon: Coins, title: "Commercial & Billing", list: ["Agreement, Insurances/BGs","MBs, RA/Final, Price adjustments","Reconciliations, Cash-flow, Audits"] },
-  ];
-  return (
-    <section className="py-8">
-      <h2 className="text-2xl font-semibold mb-6">Learning Path — Key Documents</h2>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-6">
-        {cards.map((c, i) => (
-          <LearnCard key={i} {...c} />
-        ))}
-      </div>
-    </section>
   );
 }

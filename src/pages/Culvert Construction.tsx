@@ -50,7 +50,7 @@ export default function CulvertConstruction() {
       desc:
         "Most common due to competitive cost and easy installation. Usually circular/elliptical/pipe-arch depending on site constraints.",
       wiki: "Culvert",
-      image: "https://civiltoday.com/images/Article_Image/Pipe-culvert.jpg",
+      image: "https://res.cloudinary.com/dswrgvg3c/image/upload/v1762741743/Pipe-culvert_acsapb.jpg",
       width: 330,
       height: 247,
       renderedWidth: 329,
@@ -61,7 +61,7 @@ export default function CulvertConstruction() {
       desc:
         "Useful where headroom is limited and low-flow hydraulic efficiency is desirable; aesthetic, lightweight, and easy to install.",
       wiki: "Culvert",
-      image: "https://civiltoday.com/images/Article_Image/Pipe-arch-culvert.jpg",
+      image: "https://res.cloudinary.com/dswrgvg3c/image/upload/v1762741804/Pipe-arch-culvert_yheg4y.jpg",
       width: 330,
       height: 247,
       renderedWidth: 329,
@@ -72,7 +72,7 @@ export default function CulvertConstruction() {
       desc:
         "RCC rectangular/square cells. Rigid frame action; economical on weak soils. Bottom slab spreads pressure—often no separate foundation.",
       wiki: "Reinforced_concrete",
-      image: "https://civiltoday.com/images/Article_Image/Box-culvert.jpg",
+      image: "https://res.cloudinary.com/dswrgvg3c/image/upload/v1762741872/Box-culvert_whhcpb.jpg",
       width: 330,
       height: 247,
       renderedWidth: 329,
@@ -83,7 +83,7 @@ export default function CulvertConstruction() {
       desc:
         "Metal/masonry/RCC arch that can be built without diverting flow; maintains the natural bed—often termed a low-profile culvert.",
       wiki: "Arch",
-      image: "https://civiltoday.com/images/Article_Image/Arch-culvert.jpg",
+      image: "https://res.cloudinary.com/dswrgvg3c/image/upload/v1762741916/Arch-culvert_u1f9au.jpg",
       width: 330,
       height: 247,
       renderedWidth: 329,
@@ -94,7 +94,7 @@ export default function CulvertConstruction() {
       desc:
         "Dual purpose — acts as both bridge and culvert. Typically rectangular, built on rivers/canals with pavement over culvert cells.",
       wiki: "Bridge",
-      image: "https://civiltoday.com/images/Article_Image/Bridge-culvert.jpg",
+      image: "https://res.cloudinary.com/dswrgvg3c/image/upload/v1762741963/Bridge-culvert_qwikvb.jpg",
       width: 330,
       height: 247,
       renderedWidth: 329,
@@ -105,7 +105,7 @@ export default function CulvertConstruction() {
       desc:
         "Corrugated/structural plate metal alternative to small bridges; fast to install, durable, deformable, long service life.",
       wiki: "Corrugated_galvanised_iron",
-      image: "https://civiltoday.com/images/Article_Image/Metal-Box-culvert.jpg",
+      image: "https://res.cloudinary.com/dswrgvg3c/image/upload/v1762742001/Metal-Box-culvert_vmvss8.jpg",
       width: 330,
       height: 247,
       renderedWidth: 329,
@@ -175,9 +175,6 @@ export default function CulvertConstruction() {
       { title: "Invert Level", desc: "Lowest interior surface level of the barrel, setting gradient and flow direction.", wiki: "Culvert" },
       { title: "Bed Preparation", desc: "Leveling, compacting, and cleaning the base before foundation concrete for proper support.", wiki: "Subgrade" },
       { title: "Foundation", desc: "Base that transfers structural loads to ground—PCC, RCC, or masonry.", wiki: "Foundation_(engineering)" },
-      { title: "Box Culvert", desc: "Rectangular/square RCC cell(s) used for medium–heavy flows; strong under road loads.", wiki: "Culvert#Box_culverts" },
-      { title: "Pipe Culvert", desc: "Circular/elliptical RCC/steel pipes for small discharges under roads/paths.", wiki: "Culvert#Pipe_culverts" },
-      { title: "Arch Culvert", desc: "Arched roof, often open bottom; preserves natural streambed when soil is strong.", wiki: "Culvert#Arch_culverts" },
       { title: "Cell", desc: "An individual opening in a multi-barrel culvert (e.g., double-cell = two passages).", wiki: "Culvert" },
       { title: "Haunch", desc: "Triangular region between bottom slab and wall in box culverts; strengthens corner for bending.", wiki: "Haunch_(engineering)" },
       { title: "Wing Span", desc: "Total length between outer ends of wing walls; indicates embankment retained.", wiki: "Retaining_wall" },
