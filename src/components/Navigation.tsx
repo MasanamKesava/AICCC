@@ -12,7 +12,7 @@ const Navigation = () => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
-    
+
     setTheme(initialTheme);
     document.documentElement.classList.toggle("dark", initialTheme === "dark");
   }, []);
@@ -30,7 +30,8 @@ const Navigation = () => {
     { path: "/project-cycle", label: "Project Cycle" },
     { path: "/about", label: "About" },
     { path: "/maps", label: "Maps" },
-    { path: "/contact", label: "Contact" },    
+    { path: "/contact", label: "Contact" },
+    { path: "/flowchart", label: "Flow Chart" }, // ✅ NEW LINK
   ];
 
   return (
@@ -42,18 +43,23 @@ const Navigation = () => {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
+          
+          {/* Logo */}
           <Link to="/" className="flex items-center gap-2 text-xl font-bold text-primary">
             <Building2 className="w-8 h-8" />
             <span>AICCC</span>
           </Link>
 
+          {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 className={`nav-link font-medium ${
-                  location.pathname === link.path ? "active text-primary" : "text-foreground hover:text-primary"
+                  location.pathname === link.path
+                    ? "active text-primary"
+                    : "text-foreground hover:text-primary"
                 }`}
               >
                 {link.label}
@@ -61,13 +67,18 @@ const Navigation = () => {
             ))}
           </div>
 
+          {/* Theme Toggle */}
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleTheme}
             className="rounded-full"
           >
-            {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            {theme === "light" ? (
+              <Moon className="w-5 h-5" />
+            ) : (
+              <Sun className="w-5 h-5" />
+            )}
           </Button>
         </div>
 
@@ -78,7 +89,9 @@ const Navigation = () => {
               key={link.path}
               to={link.path}
               className={`nav-link text-sm font-medium ${
-                location.pathname === link.path ? "active text-primary" : "text-foreground hover:text-primary"
+                location.pathname === link.path
+                  ? "active text-primary"
+                  : "text-foreground hover:text-primary"
               }`}
             >
               {link.label}

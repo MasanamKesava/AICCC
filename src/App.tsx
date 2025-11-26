@@ -9,6 +9,7 @@ import MapDetail from "./pages/MapDetail";
 import ProjectCycle from "./pages/ProjectCycle";
 import Terminology from "./pages/Terminology";
 import NotFound from "./pages/NotFound";
+import FlowChart from "./pages/flowchart";
 
 
 // Terminology detail pages (note the space in file names)
@@ -30,6 +31,7 @@ function App() {
         <Route path="/maps" element={<Maps />} />
         <Route path="/maps/:id" element={<MapDetail />} />
         <Route path="/project-cycle" element={<ProjectCycle />} />
+        <Route path="/flowchart" element={<FlowChart />} />
 
         {/* Terminology hub */}
         <Route path="/terminology" element={<Terminology />} />
