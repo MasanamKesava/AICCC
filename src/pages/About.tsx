@@ -1813,8 +1813,15 @@ type RawProject = { [key: string]: string | undefined };
 const parsePercent = (s: string | undefined): number =>
   s ? parseFloat(s.replace(/[^\d.-]/g, "")) || 0 : 0;
 
-const parseCrore = (s: string | undefined): number =>
-  s ? parseFloat(s.replace(/[^\d.]/g, "")) || 0 : 0;
+// FIXED: robust crore parsing
+const parseCrore = (s: string | undefined): number => {
+  if (!s) return 0;
+  // Extract first numeric block like "2,129.6" or "350.19" or "904"
+  const match = s.match(/[\d,]+(?:\.\d+)?/);
+  if (!match) return 0;
+  const numeric = match[0].replace(/,/g, "");
+  return parseFloat(numeric) || 0;
+};
 
 const projects: Project[] = rawProjects.map((p: RawProject, idx: number) => {
   const costLabel = p["Cost (Rs. In Cr.)"] ?? "";
@@ -2140,9 +2147,7 @@ const AICCCDashboard = () => {
                   <select
                     className={selectBaseClasses}
                     value={filters.pmc}
-                    onChange={(e) =>
-                      handleFilterChange("pmc", e.target.value)
-                    }
+                    onChange={(e) => handleFilterChange("pmc", e.target.value)}
                   >
                     <option value="">All PMCs</option>
                     {pmcOptions.map((v) => (
@@ -2253,9 +2258,7 @@ const AICCCDashboard = () => {
                         key={p.id}
                         onClick={() => setSelectedProjectId(p.id)}
                         className={`cursor-pointer border-b border-border/60 last:border-0 transition-colors ${
-                          isSelected
-                            ? "bg-primary/10"
-                            : "hover:bg-muted/40"
+                          isSelected ? "bg-primary/10" : "hover:bg-muted/40"
                         }`}
                       >
                         <td className="px-3 py-2 font-medium">{p.name}</td>
@@ -2451,7 +2454,7 @@ const AICCCDashboard = () => {
           </GlassCard>
         </div>
 
-        {/* Mission + Cycle at bottom (same as before, optional) */}
+        {/* Mission + Cycle at bottom */}
         <div className="grid lg:grid-cols-2 gap-6">
           <GlassCard className="text-center">
             <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
