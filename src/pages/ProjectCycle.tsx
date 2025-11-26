@@ -89,13 +89,22 @@ function SectionHeader({
   );
 }
 
+import { type LucideIcon } from "lucide-react";
+
+type CardItem = {
+  Icon?: LucideIcon;
+  title: string;
+  desc?: string;
+  list?: string[];
+};
+
 function LearnCard({
   Icon,
   title,
   desc,
   list,
 }: {
-  Icon?: any;
+  Icon?: LucideIcon;
   title: string;
   desc?: string;
   list?: string[];
@@ -669,31 +678,26 @@ export default function AICCCTrainingLibrary() {
             </div>
           </nav>
 
-          {/* Active Section */}
-          <motion.div key={active} {...fadeUp(0.05)}>
-            <SectionHeader k={active + 1} title={sections[active].title} subtitle={sections[active].subtitle} />
-
-            {/* Scrollable grid wrapper for big content */}
-            <div className="relative">
-              <div className="scroll-container grid md:grid-cols-2 lg:grid-cols-3 gap-6 pr-2 max-h-[72vh] overflow-y-auto">
-                {sections[active].cards.map((c: any, idx: number) => (
-                  <LearnCard key={idx} Icon={c.Icon} title={c.title} desc={c.desc} list={c.list} />
-                ))}
-              </div>
+                      {/* Scrollable grid wrapper for big content */}
+                      <div className="relative">
+                        <div className="scroll-container grid md:grid-cols-2 lg:grid-cols-3 gap-6 pr-2 max-h-[72vh] overflow-y-auto">
+                          {sections[active].cards.map((c: any, idx: number) => (
+                            <LearnCard key={idx} Icon={c.Icon} title={c.title} desc={c.desc} list={c.list} />
+                          ))}
+                        </div>
+                      </div>
+          
+                  {/* Pager */}
+                  <div className="flex items-center justify-between gap-3 mt-6">
+                    <button onClick={go(-1)} disabled={active === 0} className="px-4 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-50">
+                      ← Previous
+                    </button>
+                    <button onClick={go(1)} disabled={active === total - 1} className="px-4 py-2 rounded-lg border border-primary bg-primary/90 text-white hover:bg-primary">
+                      Next →
+                    </button>
+                  </div>
             </div>
-
-            {/* Pager */}
-            <div className="flex items-center justify-between gap-3 mt-6">
-              <button onClick={go(-1)} disabled={active === 0} className="px-4 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-50">
-                ← Previous
-              </button>
-              <button onClick={go(1)} disabled={active === total - 1} className="px-4 py-2 rounded-lg border border-primary bg-primary/90 text-white hover:bg-primary">
-                Next →
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-    </Layout>
-  );
+          </section>
+        </Layout>
+      );
 }

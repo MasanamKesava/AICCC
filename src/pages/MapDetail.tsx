@@ -914,16 +914,16 @@ const MapDetail = () => {
                   >
                     <div className="prose dark:prose-invert max-w-none leading-relaxed">
                       <h4 className="mt-0">
-                        {(detailSlides[detailIdx] as any)?.title}
+                        {(detailSlides[detailIdx] as Slide)?.title}
                       </h4>
-                      {"list" in (detailSlides[detailIdx] as any) ? (
+                      {"list" in (detailSlides[detailIdx] as Slide) ? (
                         <ul>
-                          {(detailSlides[detailIdx] as any).list.map(
+                          {((detailSlides[detailIdx] as Slide) as { title: string; list: string[] }).list.map(
                             (t: string, i: number) => <li key={i}>{t}</li>
                           )}
                         </ul>
                       ) : (
-                        <p>{(detailSlides[detailIdx] as any).body}</p>
+                        <p>{((detailSlides[detailIdx] as Slide) as { title: string; body: string }).body}</p>
                       )}
                     </div>
                   </motion.div>
