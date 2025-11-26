@@ -9,7 +9,8 @@ import MapDetail from "./pages/MapDetail";
 import ProjectCycle from "./pages/ProjectCycle";
 import Terminology from "./pages/Terminology";
 import NotFound from "./pages/NotFound";
-import FlowChart from "./pages/flowchart";
+import FlowChart from "./pages/FlowChart";
+
 
 
 // Terminology detail pages (note the space in file names)
