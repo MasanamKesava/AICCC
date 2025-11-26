@@ -29,7 +29,7 @@ const Home = () => {
               AICCC Construction Terminology
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground mb-8">
-              All India Centralized Construction Classification - Your comprehensive guide to construction terminology and standards
+              Amaravati Integrated Command control Center - Your comprehensive guide to construction terminology and standards
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link to="/about">
