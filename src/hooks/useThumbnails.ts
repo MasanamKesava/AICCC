@@ -1,6 +1,6 @@
 // src/hooks/useThumbnails.ts
 import { useEffect, useState } from "react";
-import { fetchImageForTerm } from "@/lib/imageSearch";
+import { fetchImageForTerm } from "../lib/imageSearch";
 
 export function useThumbnails(
   items: Array<{ key: string; query: string; fixed?: string }>,

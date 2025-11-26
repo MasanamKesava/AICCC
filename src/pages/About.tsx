@@ -2362,27 +2362,27 @@ const AICCCDashboard = () => {
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       PMC:{" "}
-                      <span className="text-white">
+                      <span className="text-foreground font-semibold">
                         {selectedProject.pmc || "-"}
                       </span>
                       <br />
                       Division:{" "}
-                      <span className="text-white">
+                      <span className="text-foreground font-semibold">
                         {selectedProject.division}
                       </span>
                       <br />
                       Funding Agency:{" "}
-                      <span className="text-white">
+                      <span className="text-foreground font-semibold">
                         {selectedProject.fundingAgency}
                       </span>
                       <br />
                       Contractor:{" "}
-                      <span className="text-white">
+                      <span className="text-foreground font-semibold">
                         {selectedProject.contractor || "-"}
                       </span>
                     </p>
                   </div>
-
+                  
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       Deputy Executive Engineer

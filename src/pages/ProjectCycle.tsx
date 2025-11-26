@@ -133,98 +133,101 @@ function LearnCard({
 
 export default function AICCCTrainingLibrary() {
   // ========================= 1) Minutes of Meeting (MOMs) =========================
-  const momCards = [
-    {
-      Icon: FileText,
-      title: "What are MOMs?",
-      desc:
-        "Minutes of Meeting (MOMs) are official written records summarizing discussions, decisions, and agreed action points. They capture what was discussed, who attended, and what needs to be done, by whom, and by when.",
-    },
-    {
-      Icon: BookOpenCheck,
-      title: "Purpose of MOMs",
-      list: [
-        "Capture meeting discussions, decisions, and responsibilities",
-        "Serve as an official record of events and agreements",
-        "Ensure accountability and follow-up on action items",
-        "Facilitate transparency among stakeholders",
-      ],
-    },
-    {
-      Icon: TrendingUp,
-      title: "Importance of MOMs",
-      list: [
-        "Acts as a formal reference for future meetings",
-        "Provides accountability and clarity of assigned tasks",
-        "Prevents miscommunication or misunderstandings",
-        "Helps in tracking project or operational progress",
-        "Demonstrates professionalism and organizational discipline",
-      ],
-    },
-    {
-      Icon: FileCheck2,
-      title: "Key Components of MOM",
-      list: [
-        "Meeting Title and Date",
-        "Attendees and Absentees",
-        "Agenda Points",
-        "Discussion Summary",
-        "Decisions Taken",
-        "Action Items with Responsible Persons and Deadlines",
-      ],
-    },
-    {
-      Icon: CalendarCheck,
-      title: "MOM Writing Process",
-      list: [
-        "Before Meeting – Prepare agenda and note objectives",
-        "During Meeting – Record key points, decisions, and assigned actions",
-        "After Meeting – Draft, review, and circulate MOM for confirmation",
-        "Follow-Up – Track completion of action points",
-      ],
-    },
-    {
-      Icon: ClipboardList,
-      title: "Example MOM Template",
-      desc:
-        "Date: ____________\nMeeting Title: ____________\nAttendees: ____________\n\nAgenda | Discussion Summary | Action Item | Responsible | Deadline\n-------|--------------------|-------------|-------------|---------\n1. | | | |\n2. | | | |",
-    },
-    {
-      Icon: ClipboardCheck,
-      title: "Sample MOM (Filled Example)",
-      desc:
-        "Date: 12 Oct 2025\nMeeting Title: Project Review – Solar Plant Site\nAttendees: Project Manager, QA Engineer, Site Incharge\n\nAgenda | Discussion | Action Item | Responsible | Deadline\n1. Quality Issues | Discussed corrosion rectification | Submit revised schedule | QA Engineer | 18 Oct 2025\n2. Procurement | Delay in anti-rust coating supply | Follow-up with vendor | Procurement Lead | 20 Oct 2025",
-    },
-    {
-      Icon: ShieldCheck,
-      title: "Do’s & Don’ts",
-      list: [
-        "✅ Be clear and concise; use bullet points; verify names, dates, and tasks; share MOM promptly",
-        "❌ Don’t include personal opinions; don’t omit key decisions; don’t delay circulation; avoid vague language",
-      ],
-    },
-    {
-      Icon: AlertTriangle,
-      title: "Common Mistakes to Avoid",
-      list: [
-        "Missing key decisions or tasks",
-        "Using ambiguous terms like ‘soon’ or ‘ASAP’",
-        "Not updating MOM after changes",
-        "Forgetting to share MOM with all participants",
-        "Poor formatting or inconsistent layout",
-      ],
-    },
-    {
-      Icon: CheckCircle2,
-      title: "Conclusion & Key Takeaways",
-      list: [
-        "MOMs are essential tools for effective communication",
-        "They ensure accountability and follow-up",
-        "Professional MOMs strengthen project management and reporting",
-        "Remember: A good MOM reflects a productive meeting.",
-      ],
-    },
-  ];
+  const momCards = useMemo(
+    () => [
+      {
+        Icon: FileText,
+        title: "What are MOMs?",
+        desc:
+          "Minutes of Meeting (MOMs) are official written records summarizing discussions, decisions, and agreed action points. They capture what was discussed, who attended, and what needs to be done, by whom, and by when.",
+      },
+      {
+        Icon: BookOpenCheck,
+        title: "Purpose of MOMs",
+        list: [
+          "Capture meeting discussions, decisions, and responsibilities",
+          "Serve as an official record of events and agreements",
+          "Ensure accountability and follow-up on action items",
+          "Facilitate transparency among stakeholders",
+        ],
+      },
+      {
+        Icon: TrendingUp,
+        title: "Importance of MOMs",
+        list: [
+          "Acts as a formal reference for future meetings",
+          "Provides accountability and clarity of assigned tasks",
+          "Prevents miscommunication or misunderstandings",
+          "Helps in tracking project or operational progress",
+          "Demonstrates professionalism and organizational discipline",
+        ],
+      },
+      {
+        Icon: FileCheck2,
+        title: "Key Components of MOM",
+        list: [
+          "Meeting Title and Date",
+          "Attendees and Absentees",
+          "Agenda Points",
+          "Discussion Summary",
+          "Decisions Taken",
+          "Action Items with Responsible Persons and Deadlines",
+        ],
+      },
+      {
+        Icon: CalendarCheck,
+        title: "MOM Writing Process",
+        list: [
+          "Before Meeting – Prepare agenda and note objectives",
+          "During Meeting – Record key points, decisions, and assigned actions",
+          "After Meeting – Draft, review, and circulate MOM for confirmation",
+          "Follow-Up – Track completion of action points",
+        ],
+      },
+      {
+        Icon: ClipboardList,
+        title: "Example MOM Template",
+        desc:
+          "Date: ____________\nMeeting Title: ____________\nAttendees: ____________\n\nAgenda | Discussion Summary | Action Item | Responsible | Deadline\n-------|--------------------|-------------|-------------|---------\n1. | | | |\n2. | | | |",
+      },
+      {
+        Icon: ClipboardCheck,
+        title: "Sample MOM (Filled Example)",
+        desc:
+          "Date: 12 Oct 2025\nMeeting Title: Project Review – Solar Plant Site\nAttendees: Project Manager, QA Engineer, Site Incharge\n\nAgenda | Discussion | Action Item | Responsible | Deadline\n1. Quality Issues | Discussed corrosion rectification | Submit revised schedule | QA Engineer | 18 Oct 2025\n2. Procurement | Delay in anti-rust coating supply | Follow-up with vendor | Procurement Lead | 20 Oct 2025",
+      },
+      {
+        Icon: ShieldCheck,
+        title: "Do’s & Don’ts",
+        list: [
+          "✅ Be clear and concise; use bullet points; verify names, dates, and tasks; share MOM promptly",
+          "❌ Don’t include personal opinions; don’t omit key decisions; don’t delay circulation; avoid vague language",
+        ],
+      },
+      {
+        Icon: AlertTriangle,
+        title: "Common Mistakes to Avoid",
+        list: [
+          "Missing key decisions or tasks",
+          "Using ambiguous terms like ‘soon’ or ‘ASAP’",
+          "Not updating MOM after changes",
+          "Forgetting to share MOM with all participants",
+          "Poor formatting or inconsistent layout",
+        ],
+      },
+      {
+        Icon: CheckCircle2,
+        title: "Conclusion & Key Takeaways",
+        list: [
+          "MOMs are essential tools for effective communication",
+          "They ensure accountability and follow-up",
+          "Professional MOMs strengthen project management and reporting",
+          "Remember: A good MOM reflects a productive meeting.",
+        ],
+      },
+    ],
+    []
+  );
 
   // ========================= 2) Communication Etiquettes (AICCC) =========================
   const commCards = [
@@ -610,7 +613,7 @@ export default function AICCCTrainingLibrary() {
       { id: "tools-docs", title: "Construction Management Tools & Documents", subtitle: "Planning · Quality · Cost · Safety · Communication", cards: toolsDocsCards },
       { id: "water-example", title: "Practical Example — Water Supply Project", subtitle: "End-to-end snapshot", cards: waterExampleCards },
     ],
-    []
+    [momCards, commCards, lifecycleCards, rolesCards, fourMCards, stagePhaseCards, govLifeCards, roadCards, highriseCards, cpmCards, schedulingIntro, schedulingRels, schedulingCtrl, hindranceCards, pmcContractorFlowCards, toolsDocsCards, waterExampleCards]
   );
 
   // Nav indicator
@@ -648,7 +651,7 @@ export default function AICCCTrainingLibrary() {
           </motion.div>
 
           {/* Tab Nav */}
-          <nav className="relative mb-6 sticky top-20 z-30" role="tablist" aria-label="Sections">
+          <nav className="mb-6 sticky top-20 z-30" role="tablist" aria-label="Sections">
             <div className="relative rounded-2xl bg-gradient-to-r from-cyan-400 via-blue-600 to-black shadow-[0_0_20px_rgba(0,255,255,.35),0_0_40px_rgba(59,130,246,.25)] ring-1 ring-cyan-300/30 backdrop-blur overflow-x-auto">
               <motion.div
                 className="absolute top-0 bottom-0 rounded-xl pointer-events-none"
@@ -707,4 +710,4 @@ export default function AICCCTrainingLibrary() {
       </section>
     </Layout>
   );
-} 
+}

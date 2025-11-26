@@ -30,7 +30,7 @@ const Navigation = () => {
     { path: "/project-cycle", label: "Project Cycle" },
     { path: "/about", label: "About" },
     { path: "/maps", label: "Maps" },
-    { path: "/contact", label: "Contact" },
+    { path: "/contact", label: "Contact" },    
   ];
 
   return (
