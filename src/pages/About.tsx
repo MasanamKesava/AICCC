@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   FileCheck,
@@ -1841,16 +1841,13 @@ type Project = {
   workClearedLabel: string;
 };
 
-// RawProject represents the incoming JSON shape where values are strings (or possibly undefined)
 type RawProject = { [key: string]: string | undefined };
 
 const parsePercent = (s: string | undefined): number =>
   s ? parseFloat(s.replace(/[^\d.-]/g, "")) || 0 : 0;
 
-// FIXED: robust crore parsing
 const parseCrore = (s: string | undefined): number => {
   if (!s) return 0;
-  // Extract first numeric block like "2,129.6" or "350.19" or "904"
   const match = s.match(/[\d,]+(?:\.\d+)?/);
   if (!match) return 0;
   const numeric = match[0].replace(/,/g, "");
@@ -1901,30 +1898,31 @@ const AICCCDashboard = () => {
     {
       phase: "Planning & Approval",
       description:
-        "Initial project conception, feasibility studies, DPR preparation, and obtaining necessary approvals from competent authorities.",
+        "Initial project conception, feasibility studies, DPR preparation, and obtaining necessary approvals.",
       icon: Target,
     },
     {
       phase: "Tendering Process",
       description:
-        "Preparation of tender documents, NIT publication, bid submission, technical and financial evaluation, and contract award.",
+        "Preparation of tender documents, NIT publication, bid process and contract award.",
       icon: FileCheck,
     },
     {
       phase: "Execution & Monitoring",
       description:
-        "Site mobilization, construction activities, quality control, progress monitoring, and adherence to specifications and timelines.",
+        "Construction, monitoring, quality checks, and progress tracking.",
       icon: Users,
     },
     {
       phase: "Completion & Handover",
       description:
-        "Final inspection, quality testing, defect rectification, project documentation, and formal handover to authorities.",
+        "Final inspection, documentation, and handover to authorities.",
       icon: Award,
     },
   ];
 
-  // FILTER STATE
+  /* ---------- FILTERS ---------- */
+
   const [filters, setFilters] = useState({
     name: "",
     hod: "",
@@ -1941,31 +1939,39 @@ const AICCCDashboard = () => {
   const handleFilterChange = (field: keyof typeof filters, value: string) =>
     setFilters((prev) => ({ ...prev, [field]: value }));
 
-  // dropdown options
+  /* ---------- Filter Options ---------- */
+
   const projectNameOptions = useMemo(
     () => Array.from(new Set(projects.map((p) => p.name))).sort(),
     []
   );
+
   const hodOptions = useMemo(
     () => Array.from(new Set(projects.map((p) => p.hod))).sort(),
     []
   );
+
   const fundingOptions = useMemo(
     () => Array.from(new Set(projects.map((p) => p.fundingAgency))).sort(),
     []
   );
+
   const contractorOptions = useMemo(
     () => Array.from(new Set(projects.map((p) => p.contractor))).sort(),
     []
   );
+
   const pmcOptions = useMemo(
     () => Array.from(new Set(projects.map((p) => p.pmc))).sort(),
     []
   );
+
   const divisionOptions = useMemo(
     () => Array.from(new Set(projects.map((p) => p.division))).sort(),
     []
   );
+
+  /* ---------- Filter Logic ---------- */
 
   const filteredProjects = useMemo(
     () =>
@@ -1979,6 +1985,7 @@ const AICCCDashboard = () => {
         const matchPmc = !filters.pmc || p.pmc === filters.pmc;
         const matchDivision =
           !filters.division || p.division === filters.division;
+
         return (
           matchName &&
           matchHod &&
@@ -1991,17 +1998,38 @@ const AICCCDashboard = () => {
     [filters]
   );
 
+  /* ---------- PAGINATION (10 per page) ---------- */
+
+  const ITEMS_PER_PAGE = 10;
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.ceil(filteredProjects.length / ITEMS_PER_PAGE);
+
+  const paginatedProjects = useMemo(() => {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    return filteredProjects.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredProjects, page]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [filters]);
+
+  /* ---------- SELECTED PROJECT ---------- */
+
   const selectedProject =
     filteredProjects.find((p) => p.id === selectedProjectId) ||
-    filteredProjects[0] ||
+    paginatedProjects[0] ||
     null;
 
-  // summary stats
+  /* ---------- SUMMARY ---------- */
+
   const totalProjects = projects.length;
   const activeProjects = projects.filter(
     (p) => p.status === "On_track" || p.status === "Delay"
   ).length;
+
   const totalBudget = projects.reduce((sum, p) => sum + p.costCr, 0);
+
   const avgProgress =
     projects.reduce((sum, p) => sum + p.workCompleted, 0) /
     (projects.length || 1);
@@ -2009,10 +2037,12 @@ const AICCCDashboard = () => {
   const selectBaseClasses =
     "w-full appearance-none rounded-xl border border-border/40 bg-background/60 px-3 py-2.5 text-sm text-foreground shadow-inner focus:outline-none focus:ring-2 focus:ring-primary/60";
 
+  /* ---------- UI RENDER ---------- */
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12 space-y-10">
-        {/* Header */}
+        {/* HEADER */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -2029,7 +2059,7 @@ const AICCCDashboard = () => {
           </div>
         </motion.div>
 
-        {/* Filters + Summary */}
+        {/* FILTERS + SUMMARY */}
         <div className="grid lg:grid-cols-[2.2fr,1fr] gap-6">
           {/* FILTER CARD */}
           <GlassCard className="space-y-4">
@@ -2059,9 +2089,6 @@ const AICCCDashboard = () => {
                       </option>
                     ))}
                   </select>
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">
-                    ▼
-                  </span>
                 </div>
               </div>
 
@@ -2083,9 +2110,6 @@ const AICCCDashboard = () => {
                       </option>
                     ))}
                   </select>
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">
-                    ▼
-                  </span>
                 </div>
               </div>
 
@@ -2109,13 +2133,10 @@ const AICCCDashboard = () => {
                       </option>
                     ))}
                   </select>
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">
-                    ▼
-                  </span>
                 </div>
               </div>
 
-              {/* Funding Agency */}
+              {/* Funding */}
               <div className="space-y-1">
                 <label className="block text-xs font-medium text-muted-foreground">
                   Funding Agency
@@ -2135,9 +2156,6 @@ const AICCCDashboard = () => {
                       </option>
                     ))}
                   </select>
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">
-                    ▼
-                  </span>
                 </div>
               </div>
 
@@ -2161,9 +2179,6 @@ const AICCCDashboard = () => {
                       </option>
                     ))}
                   </select>
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">
-                    ▼
-                  </span>
                 </div>
               </div>
 
@@ -2185,9 +2200,6 @@ const AICCCDashboard = () => {
                       </option>
                     ))}
                   </select>
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">
-                    ▼
-                  </span>
                 </div>
               </div>
             </div>
@@ -2264,9 +2276,11 @@ const AICCCDashboard = () => {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-semibold">Results</h2>
               <p className="text-sm text-muted-foreground">
-                Showing {filteredProjects.length} of {projects.length} projects
+                Showing {paginatedProjects.length} of {filteredProjects.length}{" "}
+                filtered projects
               </p>
             </div>
+
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead className="border-b border-border text-xs uppercase text-muted-foreground">
@@ -2279,9 +2293,11 @@ const AICCCDashboard = () => {
                     <th className="px-3 py-2 text-right">Work Completed</th>
                   </tr>
                 </thead>
+
                 <tbody>
-                  {filteredProjects.map((p) => {
+                  {paginatedProjects.map((p) => {
                     const isSelected = selectedProject?.id === p.id;
+
                     return (
                       <tr
                         key={p.id}
@@ -2299,6 +2315,7 @@ const AICCCDashboard = () => {
                             {p.status.replace("_", " ")}
                           </span>
                         </td>
+
                         <td className="px-3 py-2 text-right">
                           <div className="flex items-center justify-end gap-2">
                             <span>{p.workCompletedLabel}</span>
@@ -2313,24 +2330,54 @@ const AICCCDashboard = () => {
                       </tr>
                     );
                   })}
-                  {filteredProjects.length === 0 && (
-                    <tr>
-                      <td
-                        colSpan={6}
-                        className="px-3 py-6 text-center text-muted-foreground"
-                      >
-                        No projects match the current filters.
-                      </td>
-                    </tr>
-                  )}
                 </tbody>
               </table>
+
+              {/* PAGINATION */}
+              <div className="flex items-center justify-between px-3 py-4">
+                <p className="text-sm text-muted-foreground">
+                  Page {page} of {totalPages}
+                </p>
+
+                <div className="flex gap-2">
+                  <button
+                    className="px-3 py-1 rounded-lg bg-muted text-sm disabled:opacity-50"
+                    disabled={page === 1}
+                    onClick={() => setPage((p) => p - 1)}
+                  >
+                    Prev
+                  </button>
+
+                  {[...Array(totalPages)].map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setPage(i + 1)}
+                      className={`px-3 py-1 rounded-lg text-sm ${
+                        page === i + 1
+                          ? "bg-primary text-white"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+
+                  <button
+                    className="px-3 py-1 rounded-lg bg-muted text-sm disabled:opacity-50"
+                    disabled={page === totalPages}
+                    onClick={() => setPage((p) => p + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
             </div>
           </GlassCard>
 
-          {/* DETAIL PANEL */}
+          {/* PROJECT DETAILS PANEL */}
           <GlassCard className="space-y-4">
             <h2 className="text-2xl font-semibold">Project Details</h2>
+
             {!selectedProject ? (
               <p className="text-sm text-muted-foreground">
                 Select a project from the table to view full details.
@@ -2359,6 +2406,7 @@ const AICCCDashboard = () => {
                       {selectedProject.assistantEngineer || "-"}
                     </p>
                   </div>
+
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       PMC:{" "}
@@ -2382,7 +2430,7 @@ const AICCCDashboard = () => {
                       </span>
                     </p>
                   </div>
-                  
+
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       Deputy Executive Engineer
@@ -2391,6 +2439,7 @@ const AICCCDashboard = () => {
                       {selectedProject.deputyExecutiveEngineer || "-"}
                     </p>
                   </div>
+
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       Executive Engineer
@@ -2399,6 +2448,7 @@ const AICCCDashboard = () => {
                       {selectedProject.executiveEngineer || "-"}
                     </p>
                   </div>
+
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       Superintending Engineer
@@ -2407,6 +2457,7 @@ const AICCCDashboard = () => {
                       {selectedProject.superintendingEngineer || "-"}
                     </p>
                   </div>
+
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       Chief Engineer
@@ -2415,6 +2466,7 @@ const AICCCDashboard = () => {
                       {selectedProject.chiefEngineer || "-"}
                     </p>
                   </div>
+
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       HOD
@@ -2423,7 +2475,7 @@ const AICCCDashboard = () => {
                   </div>
                 </div>
 
-                {/* dates + cost + status */}
+                {/* dates + cost */}
                 <div className="grid sm:grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
@@ -2431,12 +2483,14 @@ const AICCCDashboard = () => {
                     </p>
                     <p className="font-medium">{selectedProject.startDate}</p>
                   </div>
+
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       End Date
                     </p>
                     <p className="font-medium">{selectedProject.endDate}</p>
                   </div>
+
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       Cost (Rs. in Cr.)
@@ -2445,6 +2499,7 @@ const AICCCDashboard = () => {
                       {selectedProject.costLabel || "-"}
                     </p>
                   </div>
+
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       Status
@@ -2455,7 +2510,7 @@ const AICCCDashboard = () => {
                   </div>
                 </div>
 
-                {/* progress */}
+                {/* PROGRESS */}
                 <div className="grid sm:grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
@@ -2465,6 +2520,7 @@ const AICCCDashboard = () => {
                       {selectedProject.physicalPlanLabel}
                     </p>
                   </div>
+
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       Work Completed
@@ -2473,6 +2529,7 @@ const AICCCDashboard = () => {
                       {selectedProject.workCompletedLabel}
                     </p>
                   </div>
+
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       Variance (%)
@@ -2489,6 +2546,7 @@ const AICCCDashboard = () => {
                       {selectedProject.varianceLabel}
                     </p>
                   </div>
+
                   <div>
                     <p className="text-[11px] uppercase text-muted-foreground">
                       Work Cleared
@@ -2503,15 +2561,13 @@ const AICCCDashboard = () => {
           </GlassCard>
         </div>
 
-        {/* Mission + Cycle at bottom */}
+        {/* MISSION BOX + CYCLE */}
         <div className="grid lg:grid-cols-2 gap-6">
           <GlassCard className="text-center">
             <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
             <p className="text-lg text-muted-foreground">
-              To provide a comprehensive, standardized reference for
-              construction terminology that aids engineers, contractors,
-              government officials, and stakeholders in understanding and
-              implementing construction projects efficiently.
+              To provide a standardized reference for construction terminology
+              and ensure smooth execution of government works.
             </p>
           </GlassCard>
 
@@ -2524,15 +2580,17 @@ const AICCCDashboard = () => {
             >
               Government Project Construction Cycle
             </motion.h2>
+
             <div className="grid md:grid-cols-2 gap-4">
               {projectPhases.map((phase, index) => {
                 const Icon = phase.icon;
                 return (
                   <GlassCard key={index} delay={index * 0.1}>
                     <div className="flex items-start gap-3">
-                      <div className="p-2 rounded-lg bg-primary/10 text-primary flex-shrink-0">
+                      <div className="p-2 rounded-lg bg-primary/10 text-primary">
                         <Icon className="w-6 h-6" />
                       </div>
+
                       <div>
                         <h3 className="text-base font-semibold mb-1">
                           {phase.phase}
